@@ -1,0 +1,309 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+
+        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+    }
+}
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'io.fabric'
+
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
+
+apply plugin: 'com.github.ben-manes.versions'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId 'com.stuartsoft.rotorai'
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
+
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        buildConfigField "String", "VERSION_FINGERPRINT", rootProject.ext.versionFingerprint
+
+        proguardFile getDefaultProguardFile('proguard-android.txt')
+        proguardFile 'proguard-rules.pro'
+
+        testInstrumentationRunner 'com.stuartsoft.rotorai.CustomAppTestRunner'
+    }
+
+    signingConfigs {
+        // If you are creating signing keys, consider setting up Google Play App Signing!
+        // See: https://developer.android.com/studio/publish/app-signing.html#google-play-app-signing
+        release {
+            apply from: rootProject.file('distribution/keys/sample.gradle')
+
+            storeFile rootProject.file(sampleKeystore)
+            storePassword sampleKeystorePassword
+            keyAlias sampleKeyAlias
+            keyPassword sampleKeyPassword
+        }
+    }
+
+    flavorDimensions "app"
+    productFlavors {
+        dev {
+            dimension "app"
+            applicationId 'com.stuartsoft.rotorai.dev'
+        }
+        prod {
+            dimension "app"
+            applicationId 'com.stuartsoft.rotorai'
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            testCoverageEnabled true
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        abortOnError true
+        lintConfig file('lint.xml')
+        htmlReport true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    testOptions {
+        animationsDisabled true
+
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+androidExtensions {
+    // Needed for Kotlin Parcelable support
+    experimental = true
+
+    // Prevents a bunch of other stuff from being generated
+    defaultCacheImplementation = "none"
+}
+
+ext {
+    // App dependency versions
+    supportVersion = '27.1.1'
+    playServicesVersion = '15.0.1'
+    daggerVersion = '2.14.1'
+    retrofitVersion = '2.3.0'
+    okHttpVersion = '3.9.1'
+    leakcanaryVersion = '1.5.4'
+
+    // Test dependency versions
+    mockitoVersion = '2.13.0'
+    robolectricVersion = '3.7.1'
+    androidTestSupportVersion = '1.0.1'
+    espressoVersion = '3.0.2'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    kapt "com.android.databinding:compiler:$rootProject.ext.android_plugin_version"
+    // Need this because of Kotlin
+
+    // Android/Google libraries
+    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:support-annotations:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+
+    implementation "com.google.android.gms:play-services-base:$playServicesVersion"
+
+    implementation "android.arch.lifecycle:runtime:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
+
+    // App architecture - Dagger 2
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    // App architecture - RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
+    // JSON
+    implementation 'com.squareup.moshi:moshi:1.6.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.6.0'
+
+    // Networking - HTTP
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+
+    // Networking - REST
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
+    // Monitoring - Timber (logging)
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+
+    // Monitoring - Crashlytics
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+        transitive = true
+    }
+
+    // Monitoring - Leak Canary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+
+    // Unit test
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-supportv4:$robolectricVersion"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+
+    // Android JUnit Runner, JUnit Rules, and Espresso
+    androidTestImplementation "com.android.support.test:runner:$androidTestSupportVersion"
+    androidTestImplementation "com.android.support.test:rules:$androidTestSupportVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
+
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+    androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    androidTestImplementation 'com.github.fabioCollini:DaggerMock:0.8.4'
+}
+
+task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
+    excludeFilter file("${project.rootDir}/config/findbugs/exclude.xml")
+    classes = fileTree('build/intermediates/classes/dev/debug/')
+    source = fileTree('src/main/java/')
+    classpath = files()
+    effort = 'max'
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        html.stylesheet resources.text.fromFile("${project.rootDir}/config/findbugs/customizations.xsl")
+    }
+}
+
+task pmd(type: Pmd, dependsOn: "assembleDebug") {
+    ruleSetFiles = files("${project.rootDir}/config/pmd/pmd-ruleset.xml")
+    ruleSets = []
+    // See http://sourceforge.net/p/pmd/discussion/188193/thread/6e9c6017/ for why this is needed...
+    source = fileTree('src/main/java/')
+    exclude '**/gen/**'
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+task checkstyle(type: Checkstyle, dependsOn: "assembleDebug") {
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**', '**/test/**', '**/androidTest/**'
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+    classpath = files(file("${project.rootDir}/app/build/intermediates/classes"))
+    configProperties = [
+            'checkstyle.cache.file': rootProject.file('build/checkstyle.cache'),
+    ]
+}
+
+jacoco {
+    toolVersion = rootProject.ext.jacoco_version
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest', 'createDevDebugCoverageReport']) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            /* Parcelize */
+            '**/*Creator.*',
+            /* Data binding */
+            '**/*Binding*.*',
+            '**/BR.**',
+            /* Dagger */
+            '**/*_MembersInjector.*',
+            '**/*_Factory.*',
+            '**/*_*Factory.*',
+            '**/Dagger*Component*.*',
+            '**/Dagger*Subcomponent*.*',
+            '**/devsettings/**/*.*'
+    ]
+
+    def mainTree = fileTree(dir: "$project.projectDir/src/main/java", excludes: fileFilter)
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/dev/debug", excludes: fileFilter)
+    def kotlinDebugTree = fileTree(dir: "$buildDir/tmp/kotlin-classes/devDebug", excludes: fileFilter)
+
+    sourceDirectories = files([mainTree])
+    classDirectories = files([debugTree], [kotlinDebugTree])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDevDebugUnitTest.exec',
+            'outputs/code-coverage/connected/**/*coverage.ec'
+    ])
+}
+
+// Kotlin plugin for testing
+allOpen {
+    annotation('dagger.Module')
+    annotation("com.stuartsoft.rotorai.Mockable")
+}
+
+apply from: 'generator.gradle'
