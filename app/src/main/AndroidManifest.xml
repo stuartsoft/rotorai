@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.stuartsoft.rotorai">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.stuartsoft.rotorai">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,11 +12,12 @@
         android:label="@string/app_name"
         android:name=".app.MainApplication"
         android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/backup_rules">
+        android:fullBackupContent="@xml/backup_rules"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:label="@string/app_name"
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,12 +26,11 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.welcome.WelcomeActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <!-- GENERATOR - MORE ACTIVITIES -->
 
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity=".ui.main.MainActivity"/>
+            android:targetActivity=".ui.welcome.WelcomeActivity"/>
 
         <meta-data
             android:name="com.crashlytics.ApiKey"
