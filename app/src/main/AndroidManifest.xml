@@ -24,6 +24,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.welcome.WelcomeActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <!-- GENERATOR - MORE ACTIVITIES -->
 
         <activity-alias

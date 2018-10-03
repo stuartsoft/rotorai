@@ -3,6 +3,7 @@ package com.stuartsoft.rotorai.ui
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.stuartsoft.rotorai.ui.main.MainViewModel
+import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel
 // GENERATOR - MORE IMPORTS //
 import dagger.Binds
 import dagger.Module
@@ -16,6 +17,11 @@ abstract class ViewModelFactoryModule: VariantViewModelFactoryModule() {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindsMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WelcomeViewModel::class)
+    abstract fun bindsWelcomeViewModel(welcomeViewModel: WelcomeViewModel): ViewModel
 
     // GENERATOR - MORE VIEW MODELS //
 }

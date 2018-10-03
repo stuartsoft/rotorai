@@ -5,6 +5,7 @@ import com.stuartsoft.rotorai.modules.CrashReporterModule
 import com.stuartsoft.rotorai.monitoring.LoggerModule
 import com.stuartsoft.rotorai.ui.ViewModelFactoryModule
 import com.stuartsoft.rotorai.ui.main.MainActivity
+import com.stuartsoft.rotorai.ui.welcome.WelcomeActivity
 // GENERATOR - MORE IMPORTS //
 import dagger.Component
 import javax.inject.Singleton
@@ -22,5 +23,6 @@ interface ApplicationComponent : VariantApplicationComponent {
     fun inject(application: MainApplication)
 
     fun inject(activity: MainActivity)
+    fun inject(activity: WelcomeActivity)
     // GENERATOR - MORE ACTIVITIES //
 }
