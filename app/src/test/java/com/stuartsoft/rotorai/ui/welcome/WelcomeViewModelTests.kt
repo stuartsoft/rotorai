@@ -22,8 +22,17 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun testTrueIsTrue() {
-        // This is lame...replace with something useful!
-        Assert.assertTrue(true)
+    fun needsBluetoothLinkShouldShow() {
+        viewModel.bluetoothRadioIsOn = false
+        Assert.assertTrue(viewModel.isNeedsBluetoothRadio())
+
+        viewModel.bluetoothRadioIsOn = true
+        Assert.assertFalse(viewModel.isNeedsBluetoothRadio())
+    }
+
+    @Test
+    fun broadcastFilterUpdatesViewModel() {
+        viewModel.bluetoothRadioIsOn = false
+        //viewModel.onReceiveBTStateChange()
     }
 }

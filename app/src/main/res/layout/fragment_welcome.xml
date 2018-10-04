@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data class="com.stuartsoft.rotorai.ui.welcome.WelcomeFragmentBinding">
-
+        <import type="android.view.View"/>
         <variable
                 name="vm"
                 type="com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel"/>
@@ -13,6 +13,12 @@
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/ui_needsbtaccess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visible = "@{vm.needsBluetoothRadio}" />
 
     </android.support.constraint.ConstraintLayout>
 
