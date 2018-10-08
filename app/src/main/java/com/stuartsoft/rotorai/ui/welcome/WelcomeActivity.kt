@@ -1,8 +1,12 @@
 package com.stuartsoft.rotorai.ui.welcome
 
+import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.DataBindingUtil
+import android.net.ConnectivityManager
 import android.os.Bundle
 
 import com.stuartsoft.rotorai.R
@@ -14,6 +18,13 @@ import javax.inject.Inject
 class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
     @Inject lateinit var viewModel: WelcomeViewModel
     private lateinit var binding: WelcomeActivityBinding
+
+    val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+    val br: BroadcastReceiver = object: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            viewModel.onReceiveBroadcast(intent)
+        }
+    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
@@ -27,7 +38,9 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         binding.executePendingBindings()
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar!!.title = "Welcome"
+        supportActionBar!!.title = "RotorAI"
+
+        viewModel.bluetoothRadioIsOn = BluetoothAdapter.getDefaultAdapter().isEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -38,6 +51,14 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
+
+        registerReceiver(br, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        unregisterReceiver(br)
     }
 
     companion object {

@@ -1,5 +1,15 @@
 package com.stuartsoft.rotorai.ui.welcome
 
+import android.app.Application
+import android.bluetooth.BluetoothAdapter.*
+import android.content.Context
+import android.content.Intent
+import com.stuartsoft.rotorai.BR
+import io.mockk.every
+import io.mockk.impl.annotations.SpyK
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -12,12 +22,13 @@ import org.robolectric.RuntimeEnvironment
 class WelcomeViewModelTests {
 
     private lateinit var viewModel: WelcomeViewModel
+    private lateinit var app: Application
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
-        val app = RuntimeEnvironment.application
+        app = RuntimeEnvironment.application
         viewModel = WelcomeViewModel(app)
     }
 
@@ -32,7 +43,26 @@ class WelcomeViewModelTests {
 
     @Test
     fun broadcastFilterUpdatesViewModel() {
+        viewModel = spyk(WelcomeViewModel(app))
         viewModel.bluetoothRadioIsOn = false
-        //viewModel.onReceiveBTStateChange()
+
+        val intentA = Intent()
+        intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
+        intentA.putExtra(EXTRA_STATE, STATE_ON)
+        viewModel.onReceiveBroadcast(intentA)
+
+        Assert.assertTrue(viewModel.bluetoothRadioIsOn)
+        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+
+
+        val intentB = Intent()
+        intentB.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
+        intentB.putExtra(EXTRA_STATE, STATE_OFF)
+        viewModel.onReceiveBroadcast(intentB)
+
+        Assert.assertFalse(viewModel.bluetoothRadioIsOn)
+        verify (exactly = 2) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+
     }
+
 }
