@@ -39,8 +39,6 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.title = "RotorAI"
-
-        viewModel.bluetoothRadioIsOn = BluetoothAdapter.getDefaultAdapter().isEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

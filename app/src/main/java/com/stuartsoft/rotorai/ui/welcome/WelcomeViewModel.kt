@@ -1,6 +1,7 @@
 package com.stuartsoft.rotorai.ui.welcome
 
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.content.Context
 import android.content.Intent
@@ -12,20 +13,21 @@ import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
-        private val app: Application)
+        private val app: Application,
+        private val bluetoothAdapter: BluetoothAdapter)
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
-    var bluetoothRadioIsOn : Boolean = false
+    var bluetoothRadioIsOn : Boolean? = null
 
     @Parcelize
     class State() : Parcelable
 
     override fun setupViewModel() {
-
+        bluetoothRadioIsOn = bluetoothAdapter.isEnabled
     }
 
     @Bindable
-    fun isNeedsBluetoothRadio() = !bluetoothRadioIsOn
+    fun isNeedsBluetoothRadio() = bluetoothRadioIsOn ?: false
     
     fun onReceiveBroadcast(intent: Intent?) {
         intent?.let {

@@ -1,6 +1,7 @@
 package com.stuartsoft.rotorai.app
 
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -15,4 +16,8 @@ class AndroidModule(private val application: MainApplication) {
     @Singleton
     @Provides
     fun provideApplication(): Application = application
+
+    @Singleton
+    @Provides
+    fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 }
