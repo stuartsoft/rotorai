@@ -35,6 +35,8 @@ class WelcomeViewModelTests {
 
         app = RuntimeEnvironment.application
         viewModel = WelcomeViewModel(app, mockBTAdapter)
+        viewModel.setupViewModel()
+
     }
 
     @Test
@@ -43,8 +45,6 @@ class WelcomeViewModelTests {
 
     @Test
     fun needsBluetoothLinkShouldShow() {
-        viewModel.setupViewModel()
-
         val randomBool = ((0..1).shuffled().first() == 1)
         every { mockBTAdapter.isEnabled } returns randomBool
 
@@ -53,9 +53,8 @@ class WelcomeViewModelTests {
 
     @Test
     fun broadcastFilterUpdatesViewModel() {
-        viewModel.setupViewModel()
-
         viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
 
         val intentA = Intent()
         intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
@@ -63,13 +62,15 @@ class WelcomeViewModelTests {
         viewModel.onReceiveBroadcast(intentA)
 
         verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
-
-        val intentB = Intent()
-        intentB.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
-        intentB.putExtra(EXTRA_STATE, STATE_OFF)
-        viewModel.onReceiveBroadcast(intentB)
-
-        verify (exactly = 2) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
     }
+
+    @Test
+    fun onClickNeedsBTInitiatesSingleEvent(){
+
+        //gotta figure out how to write this test
+
+    }
+
+
 
 }
