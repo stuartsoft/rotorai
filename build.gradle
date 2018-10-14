@@ -1,11 +1,13 @@
 buildscript {
     ext.android_plugin_version = '3.1.2'
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.71'
     ext.jacoco_version = '0.8.1'
 
     repositories {
         google()
         jcenter()
+
+        //preview versions of kotlin
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
 
@@ -75,7 +77,7 @@ ext {
     versionName = "$appVersion b$versionCode"
 
     // Build settings that are likely to be reused across different modules
-    minSdkVersion = 21
+    minSdkVersion = 28
     targetSdkVersion = 28
     compileSdkVersion = 28
 }

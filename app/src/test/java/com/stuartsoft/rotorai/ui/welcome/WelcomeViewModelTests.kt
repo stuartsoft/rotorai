@@ -39,48 +39,37 @@ class WelcomeViewModelTests {
 
     @Test
     fun setupViewModel() {
-        //ARRANGE
-        every { mockBTAdapter.isEnabled } returns true
-        Assert.assertNull(viewModel.bluetoothRadioIsOn)
-
-        //ACT
-        viewModel.setupViewModel()
-
-        //ASSERT
-        Assert.assertTrue(viewModel.bluetoothRadioIsOn!!)
     }
 
     @Test
     fun needsBluetoothLinkShouldShow() {
-        viewModel.bluetoothRadioIsOn = false
-        Assert.assertTrue(viewModel.isNeedsBluetoothRadio())
+        viewModel.setupViewModel()
 
-        viewModel.bluetoothRadioIsOn = true
-        Assert.assertFalse(viewModel.isNeedsBluetoothRadio())
+        val randomBool = ((0..1).shuffled().first() == 1)
+        every { mockBTAdapter.isEnabled } returns randomBool
+
+        Assert.assertEquals(!randomBool, viewModel.isNeedsBluetoothRadio())
     }
 
     @Test
     fun broadcastFilterUpdatesViewModel() {
+        viewModel.setupViewModel()
+
         viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
-        viewModel.bluetoothRadioIsOn = false
 
         val intentA = Intent()
         intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
         intentA.putExtra(EXTRA_STATE, STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        Assert.assertTrue(viewModel.bluetoothRadioIsOn!!)
         verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
-
 
         val intentB = Intent()
         intentB.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
         intentB.putExtra(EXTRA_STATE, STATE_OFF)
         viewModel.onReceiveBroadcast(intentB)
 
-        Assert.assertFalse(viewModel.bluetoothRadioIsOn!!)
         verify (exactly = 2) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
-
     }
 
 }

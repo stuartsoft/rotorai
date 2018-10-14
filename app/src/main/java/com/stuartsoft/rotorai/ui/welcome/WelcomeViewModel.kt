@@ -17,22 +17,19 @@ open class WelcomeViewModel @Inject constructor(
         private val bluetoothAdapter: BluetoothAdapter)
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
-    var bluetoothRadioIsOn : Boolean? = null
 
     @Parcelize
     class State() : Parcelable
 
     override fun setupViewModel() {
-        bluetoothRadioIsOn = bluetoothAdapter.isEnabled
     }
 
     @Bindable
-    fun isNeedsBluetoothRadio() = bluetoothRadioIsOn ?: false
+    fun isNeedsBluetoothRadio() = !bluetoothAdapter.isEnabled
     
     fun onReceiveBroadcast(intent: Intent?) {
         intent?.let {
             it.extras?.let { extraz ->
-                bluetoothRadioIsOn = extraz.getInt(EXTRA_STATE) == STATE_ON
                 notifyPropertyChanged(BR.needsBluetoothRadio)
             }
         }
