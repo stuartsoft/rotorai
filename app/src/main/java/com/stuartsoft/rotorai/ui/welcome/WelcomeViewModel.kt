@@ -35,7 +35,9 @@ open class WelcomeViewModel @Inject constructor(
     fun onReceiveBroadcast(intent: Intent?) {
         intent?.let {
             it.extras?.let { extraz ->
-                notifyPropertyChanged(BR.needsBluetoothRadio)
+                if (extraz.containsKey(EXTRA_STATE)) {
+                    notifyPropertyChanged(BR.needsBluetoothRadio)
+                }
             }
         }
     }

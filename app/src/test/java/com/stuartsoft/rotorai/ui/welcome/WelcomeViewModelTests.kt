@@ -1,6 +1,10 @@
 package com.stuartsoft.rotorai.ui.welcome
 
 import android.app.Application
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.Observer
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.content.Context
@@ -65,9 +69,22 @@ class WelcomeViewModelTests {
     }
 
     @Test
+    fun randomReceiveBroadcastDoesntTriggerBT() {
+        viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+
+        val intentA = Intent()
+        intentA.putExtra("asdf", STATE_ON)
+        viewModel.onReceiveBroadcast(intentA)
+
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+    }
+
+    @Test
     fun onClickNeedsBTInitiatesSingleEvent(){
 
         //gotta figure out how to write this test
+        //kinda don't know how to test live data really
 
     }
 
