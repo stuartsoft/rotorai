@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.Bindable
 import android.os.Parcelable
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.data.RotorUtils
@@ -53,6 +54,7 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     //eventually this will get more complicated, but for now, it's ok
+    @VisibleForTesting
     fun isVehiclePaired(bondedDevices: Set<BluetoothDevice>) =
             bondedDevices.toList().map { it.name }.contains(RotorUtils.DEFAULT_VEHICAL_NAME)
 

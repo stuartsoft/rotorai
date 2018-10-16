@@ -13,6 +13,7 @@ import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
@@ -76,13 +77,6 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun onClickNeedsBTInitiatesSingleEvent(){
-
-        //gotta figure out how to write this test
-        //kinda don't know how to test live data really
-    }
-
-    @Test
     fun vehicleIsNotAlreadyConnected() {
         val deviceSet = setOf(buildMockBTDevice("MahHeadphones", "1212121212121212"),
                 buildMockBTDevice("lolItsAnotherThing", "0000000000000000"))
@@ -98,6 +92,14 @@ class WelcomeViewModelTests {
         assertTrue(viewModel.isVehiclePaired(deviceSet))
     }
 
+    @Ignore
+    @Test
+    fun onClickNeedsBTInitiatesSingleEvent(){
+        //TODO basically, testing that clicking the blue link causes a change on the live data
+        //TODO I don't have the patience to test this right now
+    }
+
+    //----- HELPERS BELOW THIS LINE -----
 
     private fun buildMockBTDevice(name: String, address: String): BluetoothDevice{
         val mockBTDevice = mockk<BluetoothDevice>()
