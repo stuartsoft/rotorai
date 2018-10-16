@@ -3,12 +3,14 @@ package com.stuartsoft.rotorai.ui.welcome
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import android.databinding.Bindable
 import android.os.Parcelable
 import android.util.Log
 import com.stuartsoft.rotorai.BR
+import com.stuartsoft.rotorai.data.RotorUtils
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
@@ -49,6 +51,10 @@ open class WelcomeViewModel @Inject constructor(
     fun forceRefreshAllBindings() {
         notifyChange()
     }
+
+    //eventually this will get more complicated, but for now, it's ok
+    fun isVehiclePaired(bondedDevices: Set<BluetoothDevice>) =
+            bondedDevices.toList().map { it.name }.contains(RotorUtils.DEFAULT_VEHICAL_NAME)
 
     companion object {
         private const val STATE_KEY = "WelcomeViewModelState"  // NON-NLS

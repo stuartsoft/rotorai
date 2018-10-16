@@ -1,21 +1,16 @@
 package com.stuartsoft.rotorai.ui.welcome
 
 import android.app.Application
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.Observer
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
-import android.content.Context
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import com.stuartsoft.rotorai.BR
-import io.mockk.every
+import com.stuartsoft.rotorai.data.RotorUtils
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -85,9 +80,30 @@ class WelcomeViewModelTests {
 
         //gotta figure out how to write this test
         //kinda don't know how to test live data really
+    }
 
+    @Test
+    fun vehicleIsNotAlreadyConnected() {
+        val deviceSet = setOf(buildMockBTDevice("MahHeadphones", "1212121212121212"),
+                buildMockBTDevice("lolItsAnotherThing", "0000000000000000"))
+
+        assertFalse(viewModel.isVehiclePaired(deviceSet))
+    }
+
+    @Test
+    fun vehicleIsAlreadyConnected() {
+        val deviceSet = setOf(buildMockBTDevice("MahHeadphones", "1212121212121212"),
+                buildMockBTDevice(RotorUtils.DEFAULT_VEHICAL_NAME, "0000000000000000"))
+
+        assertTrue(viewModel.isVehiclePaired(deviceSet))
     }
 
 
+    private fun buildMockBTDevice(name: String, address: String): BluetoothDevice{
+        val mockBTDevice = mockk<BluetoothDevice>()
+        every { mockBTDevice.name } returns name
+        every { mockBTDevice.address } returns address
+        return mockBTDevice
+    }
 
 }
