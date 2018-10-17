@@ -25,18 +25,17 @@ open class WelcomeViewModel @Inject constructor(
 
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
 
+    @Bindable
+    lateinit var welcomeScreenStep: WelcomeScreenStep
+
     override fun setupViewModel() {
 
     }
-
-    @Bindable
-    fun isNeedsBluetoothRadio() = !bluetoothAdapter.isEnabled
 
     fun onReceiveBroadcast(intent: Intent?) {
         intent?.let {
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
-                    notifyPropertyChanged(BR.needsBluetoothRadio)
                 }
             }
         }
@@ -50,10 +49,10 @@ open class WelcomeViewModel @Inject constructor(
         notifyChange()
     }
 
-    //eventually this will get more complicated, but for now, it's ok
-    @VisibleForTesting
-    fun isVehiclePaired(bondedDevices: Set<BluetoothDevice>) =
-            bondedDevices.toList().map { it.name }.contains(RotorUtils.DEFAULT_VEHICLE_NAME)
+    enum class WelcomeScreenStep(val i: Int) {
+        SELECT_VEHICLE(2),
+        CONNECTED(3)
+    }
 
     companion object {
         private const val STATE_KEY = "WelcomeViewModelState"  // NON-NLS

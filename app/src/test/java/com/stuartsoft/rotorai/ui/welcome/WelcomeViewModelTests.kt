@@ -51,26 +51,26 @@ class WelcomeViewModelTests {
     @Test
     fun broadcastFilterUpdatesViewModel() {
         viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenPage) }
 
         val intentA = Intent()
         intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
         intentA.putExtra(EXTRA_STATE, STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.welcomeScreenPage) }
     }
 
     @Test
     fun randomReceiveBroadcastDoesntTriggerBT() {
         viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenPage) }
 
         val intentA = Intent()
         intentA.putExtra("asdf", STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenPage) }
     }
 
 

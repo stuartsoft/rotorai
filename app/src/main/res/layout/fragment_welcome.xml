@@ -20,8 +20,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:visible="@{vm.needsBluetoothRadio}">
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,23 +33,6 @@
                 android:text="@string/ui_needsbtaccess"
                 android:textColor="@android:color/holo_blue_dark"
                 android:layout_gravity="center"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:visible="@{!vm.needsBluetoothRadio}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="yay, you have bluetooth enabled!"/>
-
 
         </FrameLayout>
 

@@ -3,6 +3,8 @@ package com.stuartsoft.rotorai.app
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import com.stuartsoft.rotorai.data.BTVehicleConnector
+import com.stuartsoft.rotorai.data.RotorBTAdapterWrapper
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,4 +22,7 @@ class AndroidModule(private val application: MainApplication) {
     @Singleton
     @Provides
     fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+    @Provides
+    fun provideRotorBTAdapter(): BTVehicleConnector.RotorBTDelegate = RotorBTAdapterWrapper(provideBTAdapter())
 }

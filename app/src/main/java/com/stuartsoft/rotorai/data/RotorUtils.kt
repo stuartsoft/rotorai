@@ -1,8 +1,8 @@
 package com.stuartsoft.rotorai.data
 
-class RotorUtils() {
+class RotorUtils {
 
     companion object {
-        const val DEFAULT_VEHICLE_NAME = "RotorVehical0"
+        const val DEFAULT_VEHICLE_NAME = "RotorVehicle"
     }
 }
