@@ -4,18 +4,15 @@ import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.Intent
 import android.databinding.Bindable
 import android.os.Parcelable
 import android.support.annotation.VisibleForTesting
-import android.util.Log
 import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.data.RotorUtils
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -56,7 +53,7 @@ open class WelcomeViewModel @Inject constructor(
     //eventually this will get more complicated, but for now, it's ok
     @VisibleForTesting
     fun isVehiclePaired(bondedDevices: Set<BluetoothDevice>) =
-            bondedDevices.toList().map { it.name }.contains(RotorUtils.DEFAULT_VEHICAL_NAME)
+            bondedDevices.toList().map { it.name }.contains(RotorUtils.DEFAULT_VEHICLE_NAME)
 
     companion object {
         private const val STATE_KEY = "WelcomeViewModelState"  // NON-NLS

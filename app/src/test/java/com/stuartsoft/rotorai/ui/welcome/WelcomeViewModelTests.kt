@@ -45,10 +45,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun needsBluetoothLinkShouldShow() {
-        val randomBool = ((0..1).shuffled().first() == 1)
-        every { mockBTAdapter.isEnabled } returns randomBool
-
-        Assert.assertEquals(!randomBool, viewModel.isNeedsBluetoothRadio())
+        //TODO rebuild this test using the multistate screen
     }
 
     @Test
@@ -76,21 +73,6 @@ class WelcomeViewModelTests {
         verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.needsBluetoothRadio) }
     }
 
-    @Test
-    fun vehicleIsNotAlreadyConnected() {
-        val deviceSet = setOf(buildMockBTDevice("MahHeadphones", "1212121212121212"),
-                buildMockBTDevice("lolItsAnotherThing", "0000000000000000"))
-
-        assertFalse(viewModel.isVehiclePaired(deviceSet))
-    }
-
-    @Test
-    fun vehicleIsAlreadyConnected() {
-        val deviceSet = setOf(buildMockBTDevice("MahHeadphones", "1212121212121212"),
-                buildMockBTDevice(RotorUtils.DEFAULT_VEHICAL_NAME, "0000000000000000"))
-
-        assertTrue(viewModel.isVehiclePaired(deviceSet))
-    }
 
     @Ignore
     @Test
@@ -100,12 +82,5 @@ class WelcomeViewModelTests {
     }
 
     //----- HELPERS BELOW THIS LINE -----
-
-    private fun buildMockBTDevice(name: String, address: String): BluetoothDevice{
-        val mockBTDevice = mockk<BluetoothDevice>()
-        every { mockBTDevice.name } returns name
-        every { mockBTDevice.address } returns address
-        return mockBTDevice
-    }
 
 }
