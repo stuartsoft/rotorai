@@ -11,6 +11,7 @@ import androidx.annotation.VisibleForTesting
 import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.RotorUtils
+import com.stuartsoft.rotorai.data.VehicleConnectionState
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
@@ -27,9 +28,12 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
 
     @Bindable
-    fun getWelcomeScreenStep(): WelcomeScreenStep {
-        return WelcomeScreenStep.SELECT_VEHICLE
-    }
+    fun getWelcomeScreenStep(): WelcomeScreenStep =
+        if(btVehicleConnector.currentConnectionState() == VehicleConnectionState.READY_VEHICLE_CONNECTED){
+            WelcomeScreenStep.CONNECTED
+        } else {
+            WelcomeScreenStep.SELECT_VEHICLE
+        }
 
     override fun setupViewModel() {
 

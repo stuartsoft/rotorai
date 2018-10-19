@@ -6,11 +6,12 @@ import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import com.stuartsoft.rotorai.BR
+import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.RotorUtils
+import com.stuartsoft.rotorai.data.VehicleConnectionState
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
+import junit.framework.Assert.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
@@ -27,14 +28,14 @@ class WelcomeViewModelTests {
     private lateinit var app: Application
 
     @MockK
-    val mockBTAdapter = mockk<BluetoothAdapter>()
+    val mockBTVehicleConnector = mockk<BTVehicleConnector>()
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
         app = RuntimeEnvironment.application
-        viewModel = WelcomeViewModel(app, mockBTAdapter)
+        viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         viewModel.setupViewModel()
 
     }
@@ -44,13 +45,37 @@ class WelcomeViewModelTests {
     }
 
     @Test
+    fun WelcomeVMStepUnavailable() {
+        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
+        assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
+    }
+
+    @Test
+    fun WelcomeVMStepOffline() {
+        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
+        assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
+    }
+
+    @Test
+    fun WelcomeVMStepNotConnected() {
+        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
+        assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
+    }
+
+    @Test
+    fun WelcomeVMStepConnected() {
+        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.READY_VEHICLE_CONNECTED
+        assertEquals(WelcomeViewModel.WelcomeScreenStep.CONNECTED, viewModel.getWelcomeScreenStep())
+    }
+
+    @Test
     fun needsBluetoothLinkShouldShow() {
         //TODO rebuild this test using the multistate screen
     }
 
     @Test
     fun broadcastFilterUpdatesViewModel() {
-        viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
 
         val intentA = Intent()
@@ -63,7 +88,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun randomReceiveBroadcastDoesntTriggerBT() {
-        viewModel = spyk(WelcomeViewModel(app, mockBTAdapter))
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
 
         val intentA = Intent()
