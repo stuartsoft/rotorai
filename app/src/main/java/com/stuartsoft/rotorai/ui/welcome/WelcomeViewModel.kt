@@ -5,9 +5,9 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
-import android.databinding.Bindable
+import androidx.databinding.Bindable
 import android.os.Parcelable
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.RotorUtils

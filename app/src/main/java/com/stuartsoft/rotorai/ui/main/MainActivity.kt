@@ -1,8 +1,8 @@
 package com.stuartsoft.rotorai.ui.main
 
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import com.google.android.material.snackbar.Snackbar
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.ui.BaseActivity
 import com.stuartsoft.rotorai.ui.SimpleSnackbarMessage

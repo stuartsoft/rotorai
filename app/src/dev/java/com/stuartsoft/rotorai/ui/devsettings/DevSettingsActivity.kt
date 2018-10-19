@@ -2,7 +2,7 @@ package com.stuartsoft.rotorai.ui.devsettings
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.ui.BaseActivity

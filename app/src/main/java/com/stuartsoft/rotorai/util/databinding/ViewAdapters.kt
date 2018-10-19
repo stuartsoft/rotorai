@@ -1,6 +1,6 @@
 package com.stuartsoft.rotorai.util.databinding
 
-import android.databinding.BindingAdapter
+import androidx.databinding.BindingAdapter
 import android.view.View
 
 object ViewAdapters {

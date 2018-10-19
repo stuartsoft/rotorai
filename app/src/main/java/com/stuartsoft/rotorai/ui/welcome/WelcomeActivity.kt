@@ -1,12 +1,12 @@
 package com.stuartsoft.rotorai.ui.welcome
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.net.ConnectivityManager
 import android.os.Bundle
 

@@ -1,7 +1,7 @@
 package com.stuartsoft.rotorai.ui.devsettings
 
 import android.app.Application
-import android.databinding.Bindable
+import androidx.databinding.Bindable
 import android.os.Parcelable
 import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.app.Settings

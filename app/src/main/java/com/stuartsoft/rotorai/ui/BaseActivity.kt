@@ -1,9 +1,9 @@
 package com.stuartsoft.rotorai.ui
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
 import com.stuartsoft.rotorai.app.ApplicationComponent
 import com.stuartsoft.rotorai.app.MainApplication
 import javax.inject.Inject

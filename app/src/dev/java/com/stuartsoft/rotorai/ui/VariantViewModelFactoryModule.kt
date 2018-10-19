@@ -1,6 +1,6 @@
 package com.stuartsoft.rotorai.ui
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.stuartsoft.rotorai.ui.devsettings.DevSettingsViewModel
 import dagger.Binds
 import dagger.Module
