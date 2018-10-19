@@ -51,7 +51,8 @@ class BTVehicleConnectorTest {
     fun bluetoothOnButConnectedToWrongDevice() {
         every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns listOf(buildMockBTDevice("lmao", "1234"))
+        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns
+                listOf(buildMockBTDevice("lmao", "1234"))
 
         assertEquals(VehicleConnectionState.VEHICLE_NOT_CONNECTED, connector.currentConnectionState())
     }
@@ -60,7 +61,8 @@ class BTVehicleConnectorTest {
     fun bluetoothOnAndConnectedToVehicle() {
         every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"))
+        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns
+                listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"))
 
         assertEquals(VehicleConnectionState.READY_VEHICLE_CONNECTED, connector.currentConnectionState())
     }

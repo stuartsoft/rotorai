@@ -9,6 +9,7 @@ import android.databinding.Bindable
 import android.os.Parcelable
 import android.support.annotation.VisibleForTesting
 import com.stuartsoft.rotorai.BR
+import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.RotorUtils
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
         private val app: Application,
-        private val bluetoothAdapter: BluetoothAdapter)
+        private val btVehicleConnector: BTVehicleConnector)
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
     @Parcelize
@@ -26,7 +27,9 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
 
     @Bindable
-    lateinit var welcomeScreenStep: WelcomeScreenStep
+    fun getWelcomeScreenStep(): WelcomeScreenStep {
+        return WelcomeScreenStep.SELECT_VEHICLE
+    }
 
     override fun setupViewModel() {
 
@@ -36,6 +39,7 @@ open class WelcomeViewModel @Inject constructor(
         intent?.let {
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
+                    notifyPropertyChanged(BR.welcomeScreenStep)
                 }
             }
         }
@@ -50,8 +54,8 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     enum class WelcomeScreenStep(val i: Int) {
-        SELECT_VEHICLE(2),
-        CONNECTED(3)
+        SELECT_VEHICLE(0),
+        CONNECTED(1)
     }
 
     companion object {
