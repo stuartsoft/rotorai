@@ -64,11 +64,11 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_ENABLE_BT) {
-            viewModel.forceRefreshAllBindings()
-            //make sure we update vm bindings
-            //this is a tricky issue with the bt filter
-            //being unregistered when the bluetooth dialog goes up
 
+            //We have to forcibly update the vm, because the
+            //bt intent filter is unregistered while the dialog is displayed
+            //and as a result, the bt intent filter will miss the message :/
+            viewModel.notifyChange()
         }
     }
 

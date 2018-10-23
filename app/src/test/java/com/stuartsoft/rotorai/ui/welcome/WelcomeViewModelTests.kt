@@ -44,7 +44,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun WelcomeVMStepUnavailable() {
+    fun startupWelcomeVMStepUnavailable() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
         viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         viewModel.setupViewModel()
@@ -55,7 +55,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun WelcomeVMStepOffline() {
+    fun startupWelcomeVMStepOffline() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
         viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         viewModel.setupViewModel()
@@ -66,7 +66,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun WelcomeVMStepNotConnected() {
+    fun startupWelcomeVMStepNotConnected() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
         viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         viewModel.setupViewModel()
@@ -77,7 +77,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun WelcomeVMStepConnected() {
+    fun startupWelcomeVMStepConnected() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.READY_VEHICLE_CONNECTED
         viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         viewModel.setupViewModel()

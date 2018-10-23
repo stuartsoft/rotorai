@@ -57,7 +57,7 @@ open class WelcomeViewModel @Inject constructor(
         intent?.let {
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
-                    forceRefreshAllBindings()
+                    notifyChange()
                 }
             }
         }
@@ -65,10 +65,6 @@ open class WelcomeViewModel @Inject constructor(
 
     fun onClickNeedsBT() {
         shouldShowBTDialog.value = true
-    }
-
-    fun forceRefreshAllBindings() {
-        notifyChange()
     }
 
     enum class WelcomeScreenStep(val i: Int) {
