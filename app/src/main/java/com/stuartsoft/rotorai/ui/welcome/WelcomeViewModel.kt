@@ -1,25 +1,25 @@
 package com.stuartsoft.rotorai.ui.welcome
 
 import android.app.Application
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
-import android.bluetooth.BluetoothDevice
 import android.content.Intent
+import android.os.Parcel
 import androidx.databinding.Bindable
 import android.os.Parcelable
-import androidx.annotation.VisibleForTesting
 import com.stuartsoft.rotorai.BR
+import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
-import com.stuartsoft.rotorai.data.RotorUtils
 import com.stuartsoft.rotorai.data.VehicleConnectionState
+import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
+import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
         private val app: Application,
-        private val btVehicleConnector: BTVehicleConnector)
+        private val btvc: BTVehicleConnector)
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
     @Parcelize
@@ -28,15 +28,22 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
 
     @Bindable
+    fun getHeaderMsg(): String? = app.getString(when(btvc.currentConnectionState()){
+            UNAVAILABLE -> R.string.ui_welcome_doesnt_have_bt
+            OFFLINE -> R.string.ui_welcome_header_enable_bt
+            else -> R.string.ui_welcome_header_select_vehicle
+        }
+    )
+
+    @Bindable
     fun getWelcomeScreenStep(): WelcomeScreenStep =
-        if(btVehicleConnector.currentConnectionState() == VehicleConnectionState.READY_VEHICLE_CONNECTED){
+        if(btvc.currentConnectionState() == READY_VEHICLE_CONNECTED){
             WelcomeScreenStep.CONNECTED
         } else {
             WelcomeScreenStep.SELECT_VEHICLE
         }
 
     override fun setupViewModel() {
-
     }
 
     fun onReceiveBroadcast(intent: Intent?) {
@@ -44,6 +51,7 @@ open class WelcomeViewModel @Inject constructor(
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
                     notifyPropertyChanged(BR.welcomeScreenStep)
+                    notifyPropertyChanged(BR.headerMsg)
                 }
             }
         }
