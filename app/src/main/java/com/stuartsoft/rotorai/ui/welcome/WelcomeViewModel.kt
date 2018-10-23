@@ -28,20 +28,27 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
 
     @Bindable
-    fun getHeaderMsg(): String? = app.getString(when(btvc.currentConnectionState()){
+    fun getHeaderMsg(): String? {
+        return app.getString(when (btvc.currentConnectionState()) {
             UNAVAILABLE -> R.string.ui_welcome_doesnt_have_bt
             OFFLINE -> R.string.ui_welcome_header_enable_bt
             else -> R.string.ui_welcome_header_select_vehicle
-        }
-    )
+        })
+    }
 
     @Bindable
-    fun getWelcomeScreenStep(): WelcomeScreenStep =
-        if(btvc.currentConnectionState() == READY_VEHICLE_CONNECTED){
+    fun getWelcomeScreenStep(): WelcomeScreenStep {
+        return if(btvc.currentConnectionState() == READY_VEHICLE_CONNECTED){
             WelcomeScreenStep.CONNECTED
         } else {
             WelcomeScreenStep.SELECT_VEHICLE
         }
+    }
+
+    @Bindable
+    fun isEnableBTLinkVisible(): Boolean {
+        return btvc.currentConnectionState() == OFFLINE
+    }
 
     override fun setupViewModel() {
     }
@@ -50,8 +57,7 @@ open class WelcomeViewModel @Inject constructor(
         intent?.let {
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
-                    notifyPropertyChanged(BR.welcomeScreenStep)
-                    notifyPropertyChanged(BR.headerMsg)
+                    forceRefreshAllBindings()
                 }
             }
         }

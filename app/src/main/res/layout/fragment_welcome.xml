@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_gravity="center"
+                app:visible="@{vm.EnableBTLinkVisible}"
                 android:onClick="@{() -> vm.onClickNeedsBT()}"
                 android:text="@string/ui_needsbtaccess" />
 

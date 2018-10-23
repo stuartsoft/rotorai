@@ -51,6 +51,7 @@ class WelcomeViewModelTests {
 
         assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
         assertEquals(app.getString(R.string.ui_welcome_doesnt_have_bt), viewModel.getHeaderMsg())
+        assertEquals(false, viewModel.isEnableBTLinkVisible())
     }
 
     @Test
@@ -61,6 +62,7 @@ class WelcomeViewModelTests {
 
         assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
         assertEquals(app.getString(R.string.ui_welcome_header_enable_bt), viewModel.getHeaderMsg())
+        assertEquals(true, viewModel.isEnableBTLinkVisible())
     }
 
     @Test
@@ -71,6 +73,7 @@ class WelcomeViewModelTests {
 
         assertEquals(WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
         assertEquals(app.getString(R.string.ui_welcome_header_select_vehicle), viewModel.getHeaderMsg())
+        assertEquals(false, viewModel.isEnableBTLinkVisible())
     }
 
     @Test
@@ -80,6 +83,7 @@ class WelcomeViewModelTests {
         viewModel.setupViewModel()
 
         assertEquals(WelcomeViewModel.WelcomeScreenStep.CONNECTED, viewModel.getWelcomeScreenStep())
+        assertEquals(false, viewModel.isEnableBTLinkVisible())
     }
 
     @Test
@@ -90,32 +94,27 @@ class WelcomeViewModelTests {
     @Test
     fun broadcastFilterUpdatesViewModel() {
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.headerMsg) }
-
+        verify (exactly = 0) { viewModel.notifyChange() }
 
         val intentA = Intent()
         intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
         intentA.putExtra(EXTRA_STATE, STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
-        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.headerMsg) }
+        verify (exactly = 1) { viewModel.notifyChange() }
 
     }
 
     @Test
     fun randomReceiveBroadcastDoesntTriggerBT() {
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.headerMsg) }
+        verify (exactly = 0) { viewModel.notifyChange() }
 
         val intentA = Intent()
         intentA.putExtra("asdf", STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
-        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.headerMsg) }
+        verify (exactly = 0) { viewModel.notifyChange() }
     }
 
 
