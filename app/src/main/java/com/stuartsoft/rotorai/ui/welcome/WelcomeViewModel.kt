@@ -15,6 +15,7 @@ import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
