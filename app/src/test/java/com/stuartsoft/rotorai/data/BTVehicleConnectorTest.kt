@@ -81,8 +81,8 @@ class BTVehicleConnectorTest {
     //----- HELPER METHODS BELOW HERE -----
 
 
-    private fun buildMockBTDevice(name: String, address: String): Pair<String, String> {
-        return Pair(name, address)
+    private fun buildMockBTDevice(name: String, address: String): GenericBTDevice {
+        return GenericBTDevice(name, address)
     }
 
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorBTDelegate ): VehicleConnector() {
 
     interface RotorBTDelegate {
-        fun getBondedDeviceNamesAndAddress() : List<Pair<String, String>>
+        fun getBondedDeviceNamesAndAddress() : List<GenericBTDevice>
 
         fun isBluetoothRadioAvailable() : Boolean
 
@@ -25,7 +25,7 @@ class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorB
         }
 
         val numberOfConnectedVehicles = rotorBTDelegate.getBondedDeviceNamesAndAddress().fold(0)
-        { acc, device -> if (device.first.contains(RotorUtils.DEFAULT_VEHICLE_NAME)) acc+1 else acc }
+        { acc, device -> if (device.name.contains(RotorUtils.DEFAULT_VEHICLE_NAME)) acc+1 else acc }
 
         return when(numberOfConnectedVehicles) {
                     1 ->    READY_VEHICLE_CONNECTED

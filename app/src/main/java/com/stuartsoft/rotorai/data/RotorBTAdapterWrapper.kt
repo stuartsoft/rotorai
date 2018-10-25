@@ -7,9 +7,9 @@ class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: Bluetooth
 //This is effectively just a wrapper of BluetoothAdapter because
 // mocking it directly doesn't work well with mockk
 
-    override fun getBondedDeviceNamesAndAddress(): List<Pair<String, String>> =
+    override fun getBondedDeviceNamesAndAddress(): List<GenericBTDevice> =
         btAdapter?.let {
-            it.bondedDevices.map { device -> Pair<String, String>(device.name, device.address) }
+            it.bondedDevices.map { device -> GenericBTDevice(device.name, device.address) }
         } ?: listOf()
 
 
