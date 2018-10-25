@@ -3,21 +3,23 @@ package com.stuartsoft.rotorai.data
 import android.bluetooth.BluetoothAdapter
 import javax.inject.Inject
 
-class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: BluetoothAdapter?): BTVehicleConnector.RotorBTDelegate {
+class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: BluetoothAdapter?) {
 //This is effectively just a wrapper of BluetoothAdapter because
 // mocking it directly doesn't work well with mockk
 
-    override fun getBondedDeviceNamesAndAddress(): List<GenericBTDevice> =
+    fun getBondedDeviceNamesAndAddress(): List<GenericBTDevice> =
         btAdapter?.let {
             it.bondedDevices.map { device -> GenericBTDevice(device.name, device.address) }
         } ?: listOf()
 
 
-    override fun isBluetoothRadioAvailable(): Boolean {
+    fun isBluetoothRadioAvailable(): Boolean {
         return btAdapter != null
     }
 
-    override fun isBluetoothRadioOn(): Boolean {
+    fun isBluetoothRadioOn(): Boolean {
         return btAdapter?.isEnabled ?: false
     }
+
+    fun getAvailableDevices(): List<GenericBTDevice> = listOf()
 }

@@ -4,15 +4,7 @@ import android.bluetooth.BluetoothDevice
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import javax.inject.Inject
 
-class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorBTDelegate ): VehicleConnector() {
-
-    interface RotorBTDelegate {
-        fun getBondedDeviceNamesAndAddress() : List<GenericBTDevice>
-
-        fun isBluetoothRadioAvailable() : Boolean
-
-        fun isBluetoothRadioOn() : Boolean
-    }
+class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorBTAdapterWrapper ): VehicleConnector() {
 
     override fun currentConnectionState(): VehicleConnectionState {
 

@@ -14,9 +14,9 @@ import org.robolectric.RobolectricTestRunner
 class BTVehicleConnectorTest {
 
     @MockK
-    private val mockRotorBTDelegate : BTVehicleConnector.RotorBTDelegate = mockk()
+    private val mockRotorBTAdapterWrapper : RotorBTAdapterWrapper = mockk()
 
-    private val connector = BTVehicleConnector(mockRotorBTDelegate)
+    private val connector = BTVehicleConnector(mockRotorBTAdapterWrapper)
 
     @Before
     fun setUp() {
@@ -25,33 +25,33 @@ class BTVehicleConnectorTest {
 
     @Test
     fun bluetoothNotSupported() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns false
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns false
 
         assertEquals(VehicleConnectionState.UNAVAILABLE, connector.currentConnectionState())
     }
 
     @Test
     fun bluetoothOff() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTDelegate.isBluetoothRadioOn() } returns false
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns false
 
         assertEquals(VehicleConnectionState.OFFLINE, connector.currentConnectionState())
     }
 
     @Test
     fun bluetoothOn() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns listOf()
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
+        every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns listOf()
 
         assertEquals(VehicleConnectionState.VEHICLE_NOT_CONNECTED, connector.currentConnectionState())
     }
 
     @Test
     fun bluetoothOnButConnectedToWrongDevice() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
+        every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
                 listOf(buildMockBTDevice("lmao", "1234"))
 
         assertEquals(VehicleConnectionState.VEHICLE_NOT_CONNECTED, connector.currentConnectionState())
@@ -59,9 +59,9 @@ class BTVehicleConnectorTest {
 
     @Test
     fun bluetoothOnAndConnectedToVehicle() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
+        every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
                 listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"))
 
         assertEquals(VehicleConnectionState.READY_VEHICLE_CONNECTED, connector.currentConnectionState())
@@ -69,9 +69,9 @@ class BTVehicleConnectorTest {
 
     @Test
     fun bluetoothOnTooManyConnectedVehicles() {
-        every { mockRotorBTDelegate.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTDelegate.isBluetoothRadioOn() } returns true
-        every { mockRotorBTDelegate.getBondedDeviceNamesAndAddress() } returns
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
+        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
+        every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
                 listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"),
                         buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME+"1", "5678"))
 

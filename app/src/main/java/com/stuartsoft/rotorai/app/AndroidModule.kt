@@ -24,5 +24,5 @@ class AndroidModule(private val application: MainApplication) {
     fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
     @Provides
-    fun provideRotorBTAdapter(): BTVehicleConnector.RotorBTDelegate = RotorBTAdapterWrapper(provideBTAdapter())
+    fun provideRotorBTAdapterWrapper(): RotorBTAdapterWrapper = RotorBTAdapterWrapper(provideBTAdapter())
 }
