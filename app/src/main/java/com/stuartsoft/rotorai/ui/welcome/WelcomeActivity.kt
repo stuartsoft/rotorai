@@ -2,6 +2,7 @@ package com.stuartsoft.rotorai.ui.welcome
 
 import androidx.lifecycle.Observer
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -23,8 +24,8 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
     val REQUEST_ENABLE_BT = 1
 
-    val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
-    val br: BroadcastReceiver = object: BroadcastReceiver() {
+    private val btFilter = IntentFilter()
+    val br = object: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             viewModel.onReceiveBroadcast(intent)
         }
@@ -43,6 +44,11 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.title = "RotorAI"
+
+
+        //Add mah intent filters
+        btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        btFilter.addAction(BluetoothDevice.ACTION_FOUND)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -54,7 +60,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         super.onResume()
         viewModel.onResume()
 
-        registerReceiver(br, filter)
+        registerReceiver(br, btFilter)
 
         viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
