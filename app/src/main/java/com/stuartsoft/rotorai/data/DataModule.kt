@@ -1,6 +1,7 @@
 package com.stuartsoft.rotorai.data
 
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import com.stuartsoft.rotorai.app.Settings
 import com.stuartsoft.rotorai.data.api.github.GitHubApiService
@@ -79,6 +80,20 @@ class DataModule {
             context: Context,
             api: GitHubApiService): GitHubInteractor {
         return GitHubInteractor(context, api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+    @Singleton
+    @Provides
+    fun provideRotorBTAdapterWrapper(): RotorBTAdapterWrapper = RotorBTAdapterWrapper(provideBTAdapter())
+
+    @Singleton
+    @Provides
+    fun provideBTVehicleConnector(rotorBTAdapterWrapper: RotorBTAdapterWrapper) : BTVehicleConnector {
+        return BTVehicleConnector(rotorBTAdapterWrapper)
     }
 
     companion object {

@@ -18,11 +18,4 @@ class AndroidModule(private val application: MainApplication) {
     @Singleton
     @Provides
     fun provideApplication(): Application = application
-
-    @Singleton
-    @Provides
-    fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-
-    @Provides
-    fun provideRotorBTAdapterWrapper(): RotorBTAdapterWrapper = RotorBTAdapterWrapper(provideBTAdapter())
 }
