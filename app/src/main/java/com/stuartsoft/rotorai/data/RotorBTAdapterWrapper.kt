@@ -21,5 +21,8 @@ class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: Bluetooth
         return btAdapter?.isEnabled ?: false
     }
 
-    fun getAvailableDevices(): List<GenericBTDevice> = listOf()
+    fun startDiscovery() {
+
+    }
+
 }

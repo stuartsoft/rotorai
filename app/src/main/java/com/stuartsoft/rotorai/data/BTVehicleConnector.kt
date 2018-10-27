@@ -4,19 +4,19 @@ import android.bluetooth.BluetoothDevice
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import javax.inject.Inject
 
-class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorBTAdapterWrapper ): VehicleConnector() {
+class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: RotorBTAdapterWrapper ): VehicleConnector() {
 
     override fun currentConnectionState(): VehicleConnectionState {
 
-        if (!rotorBTDelegate.isBluetoothRadioAvailable()) {
+        if (!rotorBTAdapterWrapper.isBluetoothRadioAvailable()) {
             return UNAVAILABLE
         }
 
-        if (!rotorBTDelegate.isBluetoothRadioOn()) {
+        if (!rotorBTAdapterWrapper.isBluetoothRadioOn()) {
             return OFFLINE
         }
 
-        val numberOfConnectedVehicles = rotorBTDelegate.getBondedDeviceNamesAndAddress().fold(0)
+        val numberOfConnectedVehicles = rotorBTAdapterWrapper.getBondedDeviceNamesAndAddress().fold(0)
         { acc, device -> if (device.name.contains(RotorUtils.DEFAULT_VEHICLE_NAME)) acc+1 else acc }
 
         return when(numberOfConnectedVehicles) {
@@ -27,8 +27,11 @@ class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorB
 
     }
 
-
     fun startDiscovery() {
+        rotorBTAdapterWrapper.startDiscovery()
+    }
+
+    fun inspectNewDevice(device: BluetoothDevice) {
 
     }
 

@@ -1,21 +1,19 @@
 package com.stuartsoft.rotorai.ui.welcome
 
 import android.app.Application
-import android.bluetooth.BluetoothAdapter.*
+import android.bluetooth.BluetoothAdapter.EXTRA_STATE
+import android.bluetooth.BluetoothAdapter.STATE_ON
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
-import android.os.Parcel
-import androidx.databinding.Bindable
 import android.os.Parcelable
-import com.stuartsoft.rotorai.BR
+import androidx.databinding.Bindable
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
-import com.stuartsoft.rotorai.data.VehicleConnectionState
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
-import kotlinx.android.parcel.Parceler
 import kotlinx.android.parcel.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -59,7 +57,13 @@ open class WelcomeViewModel @Inject constructor(
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
                     notifyChange()
-                    btvc.startDiscovery()
+                    if (extraz.getInt(EXTRA_STATE) == STATE_ON) {
+                        btvc.startDiscovery()
+                    }
+                }
+                if (extraz.containsKey(EXTRA_DEVICE)) {
+                    val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
+                    btvc.inspectNewDevice(device)
                 }
             }
         }

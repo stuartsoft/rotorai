@@ -1,9 +1,9 @@
 package com.stuartsoft.rotorai.data
 
-import android.bluetooth.BluetoothDevice
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.verify
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -76,6 +76,17 @@ class BTVehicleConnectorTest {
                         buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME+"1", "5678"))
 
         assertEquals(VehicleConnectionState.TOO_MANY_VEHICLES_CONNECTED, connector.currentConnectionState())
+    }
+
+
+    @Test
+    fun beginBTDeviceDiscovery() {
+        every { mockRotorBTAdapterWrapper.startDiscovery() } returns Unit
+        verify (exactly = 0) { mockRotorBTAdapterWrapper.startDiscovery() }
+
+        connector.startDiscovery()
+
+        verify (exactly = 1) { mockRotorBTAdapterWrapper.startDiscovery() }
     }
 
     //----- HELPER METHODS BELOW HERE -----
