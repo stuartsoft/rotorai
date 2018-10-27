@@ -14,7 +14,6 @@ import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -65,7 +64,6 @@ open class WelcomeViewModel @Inject constructor(
                 if (extraz.containsKey(EXTRA_DEVICE)) {
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
                     btvc.inspectNewDevice(device)
-                    Timber.d("STUDEBUG - New device discovered %s", device.name)
                 }
             }
         }
@@ -73,10 +71,6 @@ open class WelcomeViewModel @Inject constructor(
 
     fun onClickNeedsBT() {
         shouldShowBTDialog.value = true
-    }
-
-    fun bluetoothStateChanged() {
-        btvc.startDiscovery()
     }
 
     enum class WelcomeScreenStep(val i: Int) {

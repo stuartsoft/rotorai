@@ -75,7 +75,6 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
             //bt intent filter is unregistered while the dialog is displayed
             //and as a result, the bt intent filter will miss the message :/
             viewModel.notifyChange()
-            viewModel.bluetoothStateChanged()
         }
     }
 
