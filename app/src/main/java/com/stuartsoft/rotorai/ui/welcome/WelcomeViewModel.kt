@@ -59,6 +59,7 @@ open class WelcomeViewModel @Inject constructor(
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
                     notifyChange()
+                    btvc.startDiscovery()
                 }
             }
         }

@@ -92,7 +92,8 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun broadcastFilterUpdatesViewModel() {
+    fun onReceiveBroadcastBTStateChange() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { viewModel.notifyChange() }
 
@@ -102,7 +103,7 @@ class WelcomeViewModelTests {
         viewModel.onReceiveBroadcast(intentA)
 
         verify (exactly = 1) { viewModel.notifyChange() }
-
+        verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
     }
 
     @Test
@@ -116,7 +117,6 @@ class WelcomeViewModelTests {
 
         verify (exactly = 0) { viewModel.notifyChange() }
     }
-
 
     @Ignore
     @Test

@@ -24,6 +24,12 @@ class BTVehicleConnector @Inject constructor(private val rotorBTDelegate: RotorB
                     0 ->    VEHICLE_NOT_CONNECTED
                     else -> TOO_MANY_VEHICLES_CONNECTED
                 }
+
+    }
+
+
+    fun startDiscovery() {
+
     }
 
 }
