@@ -49,6 +49,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         //Add mah intent filters
         btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         btFilter.addAction(BluetoothDevice.ACTION_FOUND)
+        registerReceiver(br, btFilter)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -60,27 +61,14 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         super.onResume()
         viewModel.onResume()
 
-        registerReceiver(br, btFilter)
-
         viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_ENABLE_BT) {
-
-            //We have to forcibly update the vm, because the
-            //bt intent filter is unregistered while the dialog is displayed
-            //and as a result, the bt intent filter will miss the message :/
-            viewModel.notifyChange()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
+    override fun onDestroy() {
+        super.onDestroy()
         unregisterReceiver(br)
     }
 
