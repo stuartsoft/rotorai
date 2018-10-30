@@ -14,8 +14,10 @@
 
     <string name="error_unexpected">We encountered an unexpected error. Please try again.</string>
     <string name="error_get_commits_error">Could not find the requested commits</string>
-    <string name="ui_needsbtaccess">Enable Bluetooth</string>
-    <string name="ui_welcome_doesnt_have_bt">Bluetooth not supported</string>
-    <string name="ui_welcome_header_enable_bt">rotor.ai needs bluetooth access</string>
-    <string name="ui_welcome_header_select_vehicle">Connect to your vehicle</string>
+    <string name="UI_WELCOME_BT_UNAVAILABLE">Bluetooth not supported</string>
+    <string name="UI_WELCOME_ENABLE_LOCATION_PERMISSION">Enable Coarse Location</string>
+    <string name="UI_WELCOME_ENABLE_BT_RADIO">Enable Bluetooth Radio</string>
+    <string name="UI_WELCOME_SELECT_VEHICLE">Select your Vehicle</string>
+    <string name="UI_WELCOME_CONNECTED">LMAO you are connected!</string>
+    <string name="UI_WELCOME_DO_IT">Do it</string>
 </resources>

@@ -38,7 +38,7 @@
                 android:layout_gravity="center"
                 app:visible="@{vm.EnableBTLinkVisible}"
                 android:onClick="@{() -> vm.onClickNeedsBT()}"
-                android:text="@string/ui_needsbtaccess" />
+                android:text="@string/UI_WELCOME_DO_IT" />
 
         </LinearLayout>
 

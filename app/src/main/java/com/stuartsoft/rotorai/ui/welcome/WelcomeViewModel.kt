@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothAdapter.STATE_ON
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Parcelable
+import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
@@ -29,18 +31,20 @@ open class WelcomeViewModel @Inject constructor(
     @Bindable
     fun getHeaderMsg(): String? {
         return app.getString(when (btvc.currentConnectionState()) {
-            UNAVAILABLE -> R.string.ui_welcome_doesnt_have_bt
-            OFFLINE -> R.string.ui_welcome_header_enable_bt
-            else -> R.string.ui_welcome_header_select_vehicle
+            READY_VEHICLE_CONNECTED -> R.string.UI_WELCOME_CONNECTED
+            OFFLINE -> R.string.UI_WELCOME_ENABLE_BT_RADIO
+            VEHICLE_NOT_CONNECTED -> if (!isLocationPermissionEnabled()) R.string.UI_WELCOME_ENABLE_LOCATION_PERMISSION else R.string.UI_WELCOME_SELECT_VEHICLE
+            else -> R.string.UI_WELCOME_BT_UNAVAILABLE
         })
     }
 
     @Bindable
     fun getWelcomeScreenStep(): WelcomeScreenStep {
-        return if(btvc.currentConnectionState() == READY_VEHICLE_CONNECTED){
-            WelcomeScreenStep.CONNECTED
-        } else {
-            WelcomeScreenStep.SELECT_VEHICLE
+        return when(btvc.currentConnectionState()){
+            UNAVAILABLE -> WelcomeScreenStep.BT_UNAVAILABLE
+            OFFLINE -> WelcomeScreenStep.ENABLE_BT_RADIO
+            VEHICLE_NOT_CONNECTED -> if (!isLocationPermissionEnabled()) WelcomeScreenStep.ENABLE_LOCATION else WelcomeScreenStep.SELECT_VEHICLE
+            else -> WelcomeScreenStep.CONNECTED
         }
     }
 
@@ -73,9 +77,14 @@ open class WelcomeViewModel @Inject constructor(
         shouldShowBTDialog.value = true
     }
 
-    enum class WelcomeScreenStep(val i: Int) {
-        SELECT_VEHICLE(0),
-        CONNECTED(1)
+    fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    enum class WelcomeScreenStep {
+        BT_UNAVAILABLE,
+        ENABLE_LOCATION,
+        ENABLE_BT_RADIO,
+        SELECT_VEHICLE,
+        CONNECTED
     }
 
     companion object {
