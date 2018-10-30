@@ -45,7 +45,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepUnavailable() {
+    fun `starts up without bt available`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns true
@@ -56,7 +56,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepEnableLocation() {
+    fun `starts up without location permission`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns false
@@ -67,7 +67,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepNoLocationAndNoBTShouldShowLocationButton() {
+    fun `starts up without location permission and with bt off, we should first ask for location permission`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns false
@@ -78,7 +78,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepOffline() {
+    fun `starts up with bt off`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns true
@@ -89,7 +89,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepNotConnected() {
+    fun `starts up with location permission and bt on but not connected`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns true
@@ -100,7 +100,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun startupWelcomeVMStepConnected() {
+    fun `starts up and already connected`() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.READY_VEHICLE_CONNECTED
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { viewModel.isLocationPermissionEnabled() } returns true
@@ -116,7 +116,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun onReceiveBroadcastBTStateChange() {
+    fun `BT switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { viewModel.notifyChange() }
@@ -130,7 +130,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun onReceiveBroadcastStartDiscoveryOnlyWhenOffToOn() {
+    fun `Start discovering devices when bt switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
@@ -151,7 +151,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun onReceiveBroadcastNewDeviceDiscovered() {
+    fun `New device is discovered`() {
         every { mockBTVehicleConnector.inspectNewDevice(any()) } returns Unit
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
@@ -165,7 +165,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun randomReceiveBroadcastDoesntTriggerBT() {
+    fun `Random broadcast intents shouldnt do anything`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
 
