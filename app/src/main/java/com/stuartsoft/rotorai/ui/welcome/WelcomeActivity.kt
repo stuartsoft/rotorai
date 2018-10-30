@@ -8,13 +8,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.databinding.DataBindingUtil
-import android.net.ConnectivityManager
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.ui.BaseActivity
 import com.stuartsoft.rotorai.ui.welcome.WelcomeFragment.WelcomeFragmentHost
-import timber.log.Timber
 
 import javax.inject.Inject
 
@@ -22,7 +21,8 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
     @Inject lateinit var viewModel: WelcomeViewModel
     private lateinit var binding: WelcomeActivityBinding
 
-    val REQUEST_ENABLE_BT = 1
+    val REQUEST_TURN_BT_ON = 1
+    val REQUEST_ENABLE_LOCATION_PERMISSION = 2
 
     private val btFilter = IntentFilter()
     val br = object: BroadcastReceiver() {
@@ -63,8 +63,17 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            startActivityForResult(enableBtIntent, REQUEST_TURN_BT_ON)
         })
+
+        viewModel.shouldAskForLocationDialog.observe(this, Observer<Boolean> {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ENABLE_LOCATION_PERMISSION)
+        })
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        viewModel.notifyChange()
     }
 
     override fun onDestroy() {

@@ -27,14 +27,16 @@ open class WelcomeViewModel @Inject constructor(
     class State() : Parcelable
 
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
+    var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
     @Bindable
     fun getHeaderMsg(): String? {
-        return app.getString(when (btvc.currentConnectionState()) {
-            READY_VEHICLE_CONNECTED -> R.string.UI_WELCOME_CONNECTED
-            OFFLINE -> R.string.UI_WELCOME_ENABLE_BT_RADIO
-            VEHICLE_NOT_CONNECTED -> if (!isLocationPermissionEnabled()) R.string.UI_WELCOME_ENABLE_LOCATION_PERMISSION else R.string.UI_WELCOME_SELECT_VEHICLE
-            else -> R.string.UI_WELCOME_BT_UNAVAILABLE
+        return app.getString(when(getWelcomeScreenStep()){
+            WelcomeScreenStep.BT_UNAVAILABLE -> R.string.UI_WELCOME_BT_UNAVAILABLE
+            WelcomeScreenStep.ENABLE_LOCATION -> R.string.UI_WELCOME_ENABLE_LOCATION_PERMISSION
+            WelcomeScreenStep.ENABLE_BT_RADIO -> R.string.UI_WELCOME_ENABLE_BT_RADIO
+            WelcomeScreenStep.SELECT_VEHICLE -> R.string.UI_WELCOME_SELECT_VEHICLE
+            WelcomeScreenStep.CONNECTED -> R.string.UI_WELCOME_CONNECTED
         })
     }
 
@@ -42,15 +44,10 @@ open class WelcomeViewModel @Inject constructor(
     fun getWelcomeScreenStep(): WelcomeScreenStep {
         return when(btvc.currentConnectionState()){
             UNAVAILABLE -> WelcomeScreenStep.BT_UNAVAILABLE
-            OFFLINE -> WelcomeScreenStep.ENABLE_BT_RADIO
+            OFFLINE -> if (!isLocationPermissionEnabled()) WelcomeScreenStep.ENABLE_LOCATION else WelcomeScreenStep.ENABLE_BT_RADIO
             VEHICLE_NOT_CONNECTED -> if (!isLocationPermissionEnabled()) WelcomeScreenStep.ENABLE_LOCATION else WelcomeScreenStep.SELECT_VEHICLE
             else -> WelcomeScreenStep.CONNECTED
         }
-    }
-
-    @Bindable
-    fun isEnableBTLinkVisible(): Boolean {
-        return btvc.currentConnectionState() == OFFLINE
     }
 
     override fun setupViewModel() {
@@ -77,14 +74,18 @@ open class WelcomeViewModel @Inject constructor(
         shouldShowBTDialog.value = true
     }
 
+    fun onClickNeedsLocation() {
+        shouldAskForLocationDialog.value = true
+    }
+
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    enum class WelcomeScreenStep {
-        BT_UNAVAILABLE,
-        ENABLE_LOCATION,
-        ENABLE_BT_RADIO,
-        SELECT_VEHICLE,
-        CONNECTED
+    enum class WelcomeScreenStep(val i: Int) {
+        BT_UNAVAILABLE(0),
+        ENABLE_LOCATION(1),
+        ENABLE_BT_RADIO(2),
+        SELECT_VEHICLE(3),
+        CONNECTED(4)
     }
 
     companion object {

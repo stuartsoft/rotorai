@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
-import android.content.pm.PackageManager
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.VehicleConnectionState
@@ -23,7 +22,6 @@ import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import java.util.jar.Manifest
 
 @RunWith(RobolectricTestRunner::class)
 class WelcomeViewModelTests {
@@ -49,7 +47,8 @@ class WelcomeViewModelTests {
     @Test
     fun startupWelcomeVMStepUnavailable() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
-        viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        every { viewModel.isLocationPermissionEnabled() } returns true
         viewModel.setupViewModel()
 
         assertEquals(BT_UNAVAILABLE, viewModel.getWelcomeScreenStep())
@@ -68,9 +67,21 @@ class WelcomeViewModelTests {
     }
 
     @Test
+    fun startupWelcomeVMStepNoLocationAndNoBTShouldShowLocationButton() {
+        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        every { viewModel.isLocationPermissionEnabled() } returns false
+        viewModel.setupViewModel()
+
+        assertEquals(ENABLE_LOCATION, viewModel.getWelcomeScreenStep())
+        assertEquals(app.getString(R.string.UI_WELCOME_ENABLE_LOCATION_PERMISSION), viewModel.getHeaderMsg())
+    }
+
+    @Test
     fun startupWelcomeVMStepOffline() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
-        viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        every { viewModel.isLocationPermissionEnabled() } returns true
         viewModel.setupViewModel()
 
         assertEquals(ENABLE_BT_RADIO, viewModel.getWelcomeScreenStep())
@@ -91,7 +102,8 @@ class WelcomeViewModelTests {
     @Test
     fun startupWelcomeVMStepConnected() {
         every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.READY_VEHICLE_CONNECTED
-        viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        every { viewModel.isLocationPermissionEnabled() } returns true
         viewModel.setupViewModel()
 
         assertEquals(CONNECTED, viewModel.getWelcomeScreenStep())

@@ -31,12 +31,22 @@
                 android:text="@{vm.headerMsg}"
                 android:textSize="@dimen/header"/>
 
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_gravity="center"
-                app:visible="@{vm.EnableBTLinkVisible}"
+                app:visible="@{vm.WelcomeScreenStep == com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.ENABLE_LOCATION}"
+                android:onClick="@{() -> vm.onClickNeedsLocation()}"
+                android:text="@string/UI_WELCOME_ENABLE_LOCATION" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_gravity="center"
+                app:visible="@{vm.WelcomeScreenStep == com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.ENABLE_BT_RADIO}"
                 android:onClick="@{() -> vm.onClickNeedsBT()}"
                 android:text="@string/UI_WELCOME_DO_IT" />
 

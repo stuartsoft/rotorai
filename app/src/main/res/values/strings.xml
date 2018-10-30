@@ -19,5 +19,7 @@
     <string name="UI_WELCOME_ENABLE_BT_RADIO">Enable Bluetooth Radio</string>
     <string name="UI_WELCOME_SELECT_VEHICLE">Select your Vehicle</string>
     <string name="UI_WELCOME_CONNECTED">LMAO you are connected!</string>
+
     <string name="UI_WELCOME_DO_IT">Do it</string>
+    <string name="UI_WELCOME_ENABLE_LOCATION">Enable Location</string>
 </resources>
