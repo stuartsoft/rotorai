@@ -43,7 +43,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         binding.executePendingBindings()
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar!!.title = "RotorAI"
+        supportActionBar!!.title = getString(R.string.app_name)
 
 
         //Add mah intent filters

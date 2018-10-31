@@ -99,7 +99,10 @@ class WelcomeViewModelTests {
 
     @Test
     fun `should immediately begin searching on startup if possible`() {
-        //TODO FILL THIS IN NOW!
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
+        verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
+        viewModel.setupViewModel()
+        verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
     }
 
     @Test
@@ -168,7 +171,6 @@ class WelcomeViewModelTests {
         verify (exactly = 0) { viewModel.notifyChange() }
         verify(exactly = 0) { mockBTVehicleConnector.inspectNewDevice(ofType(BluetoothDevice::class)) }
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
-
     }
 
     @Ignore
@@ -182,6 +184,7 @@ class WelcomeViewModelTests {
 
 
     private fun buildSpyViewModel(connectionState: VehicleConnectionState, locationIsEnabled: Boolean): WelcomeViewModel{
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns connectionState
         val spyViewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { spyViewModel.isLocationPermissionEnabled() } returns locationIsEnabled

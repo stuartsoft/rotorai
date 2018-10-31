@@ -51,6 +51,9 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     override fun setupViewModel() {
+        if (isLocationPermissionEnabled() && btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED){
+            btvc.startDiscovery()
+        }
     }
 
     fun onReceiveBroadcast(intent: Intent?) {
