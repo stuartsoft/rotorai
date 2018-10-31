@@ -8,6 +8,7 @@ import android.content.Intent
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.VehicleConnectionState
+import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -26,7 +27,6 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class WelcomeViewModelTests {
 
-    private lateinit var viewModel: WelcomeViewModel
     private lateinit var app: Application
 
     @MockK
@@ -37,7 +37,6 @@ class WelcomeViewModelTests {
         MockitoAnnotations.initMocks(this)
 
         app = RuntimeEnvironment.application
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
     }
 
     @Test
@@ -46,9 +45,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun `starts up without bt available`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.UNAVAILABLE
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns true
+        val viewModel = buildSpyViewModel(UNAVAILABLE, true)
         viewModel.setupViewModel()
 
         assertEquals(BT_UNAVAILABLE, viewModel.getWelcomeScreenStep())
@@ -57,9 +54,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun `starts up without location permission`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns false
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
         viewModel.setupViewModel()
 
         assertEquals(ENABLE_LOCATION, viewModel.getWelcomeScreenStep())
@@ -68,9 +63,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun `starts up without location permission and with bt off, we should first ask for location permission`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns false
+        val viewModel = buildSpyViewModel(OFFLINE, false)
         viewModel.setupViewModel()
 
         assertEquals(ENABLE_LOCATION, viewModel.getWelcomeScreenStep())
@@ -79,9 +72,7 @@ class WelcomeViewModelTests {
 
     @Test
     fun `starts up with bt off`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.OFFLINE
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns true
+        val viewModel = buildSpyViewModel(OFFLINE, true)
         viewModel.setupViewModel()
 
         assertEquals(ENABLE_BT_RADIO, viewModel.getWelcomeScreenStep())
@@ -89,10 +80,8 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun `starts up with location permission and bt on but not connected`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.VEHICLE_NOT_CONNECTED
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns true
+    fun `starts up with location permission and bt but not connected`() {
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
         viewModel.setupViewModel()
 
         assertEquals(SELECT_VEHICLE, viewModel.getWelcomeScreenStep())
@@ -101,13 +90,16 @@ class WelcomeViewModelTests {
 
     @Test
     fun `starts up and already connected`() {
-        every { mockBTVehicleConnector.currentConnectionState() } returns VehicleConnectionState.READY_VEHICLE_CONNECTED
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        every { viewModel.isLocationPermissionEnabled() } returns true
+        val viewModel = buildSpyViewModel(READY_VEHICLE_CONNECTED, true)
         viewModel.setupViewModel()
 
         assertEquals(CONNECTED, viewModel.getWelcomeScreenStep())
         assertEquals(app.getString(R.string.UI_WELCOME_CONNECTED), viewModel.getHeaderMsg())
+    }
+
+    @Test
+    fun `should immediately begin searching on startup if possible`() {
+        //TODO FILL THIS IN NOW!
     }
 
     @Test
@@ -118,7 +110,7 @@ class WelcomeViewModelTests {
     @Test
     fun `BT switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { viewModel.notifyChange() }
 
         val intentA = Intent()
@@ -132,7 +124,7 @@ class WelcomeViewModelTests {
     @Test
     fun `Start discovering devices when bt switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
 
         val intentA = Intent()
@@ -154,7 +146,7 @@ class WelcomeViewModelTests {
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.inspectNewDevice(any()) } returns Unit
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
 
         val intentA = Intent()
         val mockdevice : BluetoothDevice = spyk()
@@ -167,7 +159,7 @@ class WelcomeViewModelTests {
     @Test
     fun `Random broadcast intents shouldnt do anything`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
 
         val intentA = Intent()
         intentA.putExtra("asdf", STATE_ON)
@@ -187,5 +179,13 @@ class WelcomeViewModelTests {
     }
 
     //----- HELPERS BELOW THIS LINE -----
+
+
+    private fun buildSpyViewModel(connectionState: VehicleConnectionState, locationIsEnabled: Boolean): WelcomeViewModel{
+        every { mockBTVehicleConnector.currentConnectionState() } returns connectionState
+        val spyViewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        every { spyViewModel.isLocationPermissionEnabled() } returns locationIsEnabled
+        return spyViewModel
+    }
 
 }
