@@ -29,6 +29,8 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
+    val discoveredDevices = mutableListOf<BluetoothDevice>()
+
     @Bindable
     fun getHeaderMsg(): String? {
         return app.getString(when(getWelcomeScreenStep()){
@@ -67,6 +69,7 @@ open class WelcomeViewModel @Inject constructor(
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
+                    discoveredDevices.add(device)
                 }
             }
         }

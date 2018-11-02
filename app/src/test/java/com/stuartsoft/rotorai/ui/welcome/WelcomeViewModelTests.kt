@@ -149,12 +149,14 @@ class WelcomeViewModelTests {
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        assertEquals(0, viewModel.discoveredDevices.count())
 
         val intentA = Intent()
         val mockdevice : BluetoothDevice = spyk()
         intentA.putExtra(EXTRA_DEVICE, mockdevice )
         viewModel.onReceiveBroadcast(intentA)
 
+        assertEquals(1, viewModel.discoveredDevices.count())
     }
 
     @Test
