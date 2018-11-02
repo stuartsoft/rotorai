@@ -147,7 +147,6 @@ class WelcomeViewModelTests {
 
     @Test
     fun `New device is discovered`() {
-        every { mockBTVehicleConnector.inspectNewDevice(any()) } returns Unit
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
 
@@ -156,7 +155,6 @@ class WelcomeViewModelTests {
         intentA.putExtra(EXTRA_DEVICE, mockdevice )
         viewModel.onReceiveBroadcast(intentA)
 
-        verify(exactly = 1) { mockBTVehicleConnector.inspectNewDevice(ofType(BluetoothDevice::class)) }
     }
 
     @Test
@@ -169,7 +167,6 @@ class WelcomeViewModelTests {
         viewModel.onReceiveBroadcast(intentA)
 
         verify (exactly = 0) { viewModel.notifyChange() }
-        verify(exactly = 0) { mockBTVehicleConnector.inspectNewDevice(ofType(BluetoothDevice::class)) }
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
     }
 

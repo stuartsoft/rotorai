@@ -31,8 +31,4 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
         rotorBTAdapterWrapper.startDiscovery()
     }
 
-    fun inspectNewDevice(device: BluetoothDevice) {
-
-    }
-
 }

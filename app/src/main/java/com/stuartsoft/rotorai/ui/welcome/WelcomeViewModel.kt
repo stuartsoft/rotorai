@@ -42,7 +42,7 @@ open class WelcomeViewModel @Inject constructor(
 
     @Bindable
     fun getWelcomeScreenStep(): WelcomeScreenStep {
-        return when(btvc.currentConnectionState()){
+        return when(btvc.currentConnectionState()) {
             UNAVAILABLE -> WelcomeScreenStep.BT_UNAVAILABLE
             OFFLINE -> if (!isLocationPermissionEnabled()) WelcomeScreenStep.ENABLE_LOCATION else WelcomeScreenStep.ENABLE_BT_RADIO
             VEHICLE_NOT_CONNECTED -> if (!isLocationPermissionEnabled()) WelcomeScreenStep.ENABLE_LOCATION else WelcomeScreenStep.SELECT_VEHICLE
@@ -67,7 +67,6 @@ open class WelcomeViewModel @Inject constructor(
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
-                    btvc.inspectNewDevice(device)
                 }
             }
         }
