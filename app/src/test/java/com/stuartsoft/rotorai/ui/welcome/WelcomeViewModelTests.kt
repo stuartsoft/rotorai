@@ -149,14 +149,36 @@ class WelcomeViewModelTests {
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
-        assertEquals(0, viewModel.discoveredDevices.count())
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
 
         val intentA = Intent()
         val mockdevice : BluetoothDevice = spyk()
+        every { mockdevice.name } returns "lol"
         intentA.putExtra(EXTRA_DEVICE, mockdevice )
         viewModel.onReceiveBroadcast(intentA)
 
-        assertEquals(1, viewModel.discoveredDevices.count())
+        assertEquals(1, viewModel.getDiscoveredDevices().count())
+    }
+
+    @Test
+    fun `Dont show devices with no name`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
+
+        val intentA = Intent()
+        val mockDeviceA : BluetoothDevice = spyk()
+        every { mockDeviceA.name } returns ""
+        intentA.putExtra(EXTRA_DEVICE, mockDeviceA )
+        viewModel.onReceiveBroadcast(intentA)
+
+        val intentB = Intent()
+        val mockDeviceB : BluetoothDevice = spyk()
+        every { mockDeviceB.name } returns null
+        intentB.putExtra(EXTRA_DEVICE, mockDeviceB)
+        viewModel.onReceiveBroadcast(intentB)
+
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
     }
 
     @Test

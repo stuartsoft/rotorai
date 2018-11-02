@@ -22,7 +22,7 @@ class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: Bluetooth
     }
 
     fun startDiscovery() {
-
+        btAdapter?.startDiscovery()
     }
 
 }

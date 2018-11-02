@@ -10,12 +10,15 @@ import android.content.pm.PackageManager
 import android.os.Parcelable
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
+import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
+import com.stuartsoft.rotorai.data.GenericBTDevice
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -29,7 +32,10 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
-    val discoveredDevices = mutableListOf<BluetoothDevice>()
+    private val discoveredDevices = mutableListOf<GenericBTDevice>()
+
+    @Bindable
+    fun getDiscoveredDevices() = discoveredDevices
 
     @Bindable
     fun getHeaderMsg(): String? {
@@ -69,7 +75,12 @@ open class WelcomeViewModel @Inject constructor(
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
-                    discoveredDevices.add(device)
+                    val genericBTDevice = GenericBTDevice(device)
+                    if (genericBTDevice.name != ""){
+                        discoveredDevices.add(GenericBTDevice(device))
+                        notifyPropertyChanged(BR.discoveredDevices)
+                        Timber.d("STULOG NEW DEVICE")
+                    }
                 }
             }
         }
