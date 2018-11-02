@@ -31,4 +31,8 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
         rotorBTAdapterWrapper.startDiscovery()
     }
 
+    fun isInDiscoveryMode(): Boolean {
+        return rotorBTAdapterWrapper.isInDiscoveryMode()
+    }
+
 }

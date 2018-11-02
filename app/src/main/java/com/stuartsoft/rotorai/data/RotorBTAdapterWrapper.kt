@@ -25,4 +25,8 @@ class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: Bluetooth
         btAdapter?.startDiscovery()
     }
 
+    fun isInDiscoveryMode(): Boolean {
+        return btAdapter?.isDiscovering ?: false
+    }
+
 }

@@ -37,6 +37,9 @@ open class WelcomeViewModel @Inject constructor(
     @Bindable
     fun getDiscoveredDevices() = discoveredDevices
 
+    @Bindable("getHeaderMsg")
+    fun isSearching() = btvc.isInDiscoveryMode()
+
     @Bindable
     fun getHeaderMsg(): String? {
         return app.getString(when(getWelcomeScreenStep()){
