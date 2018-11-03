@@ -82,7 +82,7 @@ open class WelcomeViewModel @Inject constructor(
                     val genericBTDevice = GenericBTDevice(device)
                     if (genericBTDevice.name != ""){
                         btDiscoveredDevices.add(GenericBTDevice(device))
-                        notifyPropertyChanged(BR.discoveredDevices)
+                        notifyChange()
                         Timber.d("STULOG NEW DEVICE")
                     }
                 }

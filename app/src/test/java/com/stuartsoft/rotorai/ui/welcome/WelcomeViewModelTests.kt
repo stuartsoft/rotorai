@@ -109,9 +109,10 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun `BT switches from off to on`() {
+    fun `Start discovering devices when bt switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
         verify (exactly = 0) { viewModel.notifyChange() }
 
         val intentA = Intent()
@@ -119,21 +120,8 @@ class WelcomeViewModelTests {
         intentA.putExtra(EXTRA_STATE, STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 1) { viewModel.notifyChange() }
-    }
-
-    @Test
-    fun `Start discovering devices when bt switches from off to on`() {
-        every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
-        verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
-
-        val intentA = Intent()
-        intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
-        intentA.putExtra(EXTRA_STATE, STATE_ON)
-        viewModel.onReceiveBroadcast(intentA)
-
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
+        verify (exactly = 1) { viewModel.notifyChange() }
 
         val intentB = Intent()
         intentB.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
