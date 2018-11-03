@@ -64,7 +64,7 @@ open class WelcomeViewModel @Inject constructor(
 
     override fun setupViewModel() {
         if (isLocationPermissionEnabled() && btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED){
-            btvc.startDiscovery()
+            startDiscovery()
         }
     }
 
@@ -74,7 +74,7 @@ open class WelcomeViewModel @Inject constructor(
                 if (extraz.containsKey(EXTRA_STATE)) {
                     notifyChange()
                     if (extraz.getInt(EXTRA_STATE) == STATE_ON) {
-                        btvc.startDiscovery()
+                        startDiscovery()
                     }
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
@@ -99,6 +99,11 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    fun startDiscovery() {
+        btDiscoveredDevices = mutableListOf()
+        btvc.startDiscovery()
+    }
 
     enum class WelcomeScreenStep(val i: Int) {
         BT_UNAVAILABLE(0),

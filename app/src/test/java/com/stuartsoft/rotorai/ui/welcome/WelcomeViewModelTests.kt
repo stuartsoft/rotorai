@@ -6,9 +6,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import com.stuartsoft.rotorai.R
-import com.stuartsoft.rotorai.data.BTVehicleConnector
-import com.stuartsoft.rotorai.data.DaggerTestComponent
-import com.stuartsoft.rotorai.data.VehicleConnectionState
+import com.stuartsoft.rotorai.data.*
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
 import io.mockk.every
@@ -184,6 +182,19 @@ class WelcomeViewModelTests {
     }
 
     @Test
+    fun `Clear devices when starting discovery`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        injectTestModule(viewModel, mutableListOf(GenericBTDevice("asdf", "0000")))
+
+        assertEquals(1, viewModel.getDiscoveredDevices().count())
+
+        viewModel.startDiscovery()
+
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
+    }
+
+    @Test
     fun `Random broadcast intents shouldnt do anything`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
@@ -215,8 +226,10 @@ class WelcomeViewModelTests {
         return spyViewModel
     }
 
-    private fun injectTestModule(welcomeViewModel: WelcomeViewModel){
-        DaggerTestComponent.builder().build().inject(welcomeViewModel)
+    private fun injectTestModule(welcomeViewModel: WelcomeViewModel, listOfDevices: MutableList<GenericBTDevice> = mutableListOf()){
+        DaggerTestComponent.builder()
+                .testDataModule(TestDataModule(listOfDevices))
+                .build().inject(welcomeViewModel)
     }
 
 }

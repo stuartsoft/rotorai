@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class TestDataModule() {
+class TestDataModule(val deviceList: MutableList<GenericBTDevice>) {
     @Provides
-    fun giveMeADeviceList(): MutableList<GenericBTDevice> = mutableListOf()
+    fun giveMeADeviceList(): MutableList<GenericBTDevice> = deviceList
 }
