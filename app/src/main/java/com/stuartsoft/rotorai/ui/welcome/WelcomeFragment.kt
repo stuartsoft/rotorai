@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
 import com.stuartsoft.rotorai.GenericBTDeviceBinding
 import com.stuartsoft.rotorai.ui.BaseFragment
 
@@ -38,6 +40,7 @@ class WelcomeFragment : BaseFragment() {
 
         binding.uiBtdevices.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         binding.uiBtdevices.adapter = BTDeviceListAdapter()
+        binding.uiBtdevices.addItemDecoration(DividerItemDecoration(this.context, HORIZONTAL))
 
         return binding.root
     }

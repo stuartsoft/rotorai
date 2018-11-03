@@ -21,14 +21,34 @@
             android:layout_gravity="center">
 
             <TextView
+                android:id="@+id/ui_device_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:paddingTop="@dimen/normalPadding"
+                android:paddingLeft="@dimen/normalPadding"
+                android:paddingRight="@dimen/normalPadding"
+                android:paddingBottom="@dimen/smallPadding"
                 app:text="@{item.name}"
-                android:textSize="@dimen/regulartext"
+                android:textSize="@dimen/normalText"
                 tools:text="LMAO"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/smallPadding"
+                android:paddingLeft="@dimen/normalPadding"
+                android:paddingRight="@dimen/normalPadding"
+                android:paddingBottom="@dimen/normalPadding"
+                app:text="@{item.address}"
+                tools:text="0000000000"
+                android:textSize="@dimen/smallText"
+                app:layout_constraintTop_toBottomOf="@id/ui_device_item_name"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

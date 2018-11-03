@@ -2,5 +2,8 @@
 <resources>
 
     <dimen name="header">24dp</dimen>
-    <dimen name="regulartext">16dp</dimen>
+    <dimen name="smallText"></dimen>
+    <dimen name="normalText">16dp</dimen>
+    <dimen name="smallPadding">4dp</dimen>
+    <dimen name="normalPadding">8dp</dimen>
 </resources>
