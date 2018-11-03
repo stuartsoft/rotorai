@@ -2,12 +2,8 @@ package com.stuartsoft.rotorai.data
 
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.Context
-import com.stuartsoft.rotorai.app.Settings
-import com.stuartsoft.rotorai.data.api.github.GitHubApiService
-import com.stuartsoft.rotorai.data.api.github.GitHubInteractor
 import com.squareup.moshi.Moshi
+import com.stuartsoft.rotorai.app.Settings
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -67,20 +63,6 @@ class DataModule {
                 .addConverterFactory(converterFactory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideGitHubApiService(retrofit: Retrofit): GitHubApiService {
-        return retrofit.create(GitHubApiService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGitHubService(
-            context: Context,
-            api: GitHubApiService): GitHubInteractor {
-        return GitHubInteractor(context, api)
     }
 
     @Singleton

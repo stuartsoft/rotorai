@@ -13,6 +13,6 @@ class SimpleRobolectricTest {
     fun testAppName() {
         val application = RuntimeEnvironment.application
         val appName = application.getString(R.string.app_name)
-        assertEquals("My App", appName)
+        assertEquals("rotor.ai", appName)
     }
 }
