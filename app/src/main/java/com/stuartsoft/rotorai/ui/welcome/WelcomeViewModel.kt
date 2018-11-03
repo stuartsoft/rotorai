@@ -103,6 +103,7 @@ open class WelcomeViewModel @Inject constructor(
     fun startDiscovery() {
         btDiscoveredDevices = mutableListOf()
         btvc.startDiscovery()
+        notifyChange()
     }
 
     enum class WelcomeScreenStep(val i: Int) {

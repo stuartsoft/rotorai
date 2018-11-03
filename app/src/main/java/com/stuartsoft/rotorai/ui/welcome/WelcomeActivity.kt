@@ -50,6 +50,15 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         btFilter.addAction(BluetoothDevice.ACTION_FOUND)
         registerReceiver(br, btFilter)
+
+        viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_TURN_BT_ON)
+        })
+
+        viewModel.shouldAskForLocationDialog.observe(this, Observer<Boolean> {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ENABLE_LOCATION_PERMISSION)
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -60,15 +69,6 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-
-        viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_TURN_BT_ON)
-        })
-
-        viewModel.shouldAskForLocationDialog.observe(this, Observer<Boolean> {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ENABLE_LOCATION_PERMISSION)
-        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
