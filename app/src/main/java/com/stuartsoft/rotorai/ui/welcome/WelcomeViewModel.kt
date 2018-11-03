@@ -32,10 +32,11 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
-    private val discoveredDevices = mutableListOf<GenericBTDevice>()
+    @Inject
+    lateinit var btDiscoveredDevices: MutableList<GenericBTDevice>
 
     @Bindable
-    fun getDiscoveredDevices() = discoveredDevices
+    fun getDiscoveredDevices() = btDiscoveredDevices
 
     @Bindable("getHeaderMsg")
     fun isSearching() = btvc.isInDiscoveryMode()
@@ -80,7 +81,7 @@ open class WelcomeViewModel @Inject constructor(
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
                     val genericBTDevice = GenericBTDevice(device)
                     if (genericBTDevice.name != ""){
-                        discoveredDevices.add(GenericBTDevice(device))
+                        btDiscoveredDevices.add(GenericBTDevice(device))
                         notifyPropertyChanged(BR.discoveredDevices)
                         Timber.d("STULOG NEW DEVICE")
                     }

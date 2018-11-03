@@ -2,6 +2,7 @@ package com.stuartsoft.rotorai.data
 
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.stuartsoft.rotorai.app.Settings
 import com.stuartsoft.rotorai.data.api.github.GitHubApiService
@@ -94,6 +95,11 @@ class DataModule {
     @Provides
     fun provideBTVehicleConnector(rotorBTAdapterWrapper: RotorBTAdapterWrapper) : BTVehicleConnector {
         return BTVehicleConnector(rotorBTAdapterWrapper)
+    }
+
+    @Provides
+    fun giveMeAListOfBTDevices() : MutableList<GenericBTDevice> {
+        return mutableListOf()
     }
 
     companion object {

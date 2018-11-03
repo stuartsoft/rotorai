@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
+import com.stuartsoft.rotorai.data.DaggerTestComponent
 import com.stuartsoft.rotorai.data.VehicleConnectionState
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
@@ -35,7 +36,6 @@ class WelcomeViewModelTests {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-
         app = RuntimeEnvironment.application
     }
 
@@ -149,6 +149,7 @@ class WelcomeViewModelTests {
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        injectTestModule(viewModel)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
         val intentA = Intent()
@@ -164,6 +165,7 @@ class WelcomeViewModelTests {
     fun `Dont show devices with no name`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        injectTestModule(viewModel)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
         val intentA = Intent()
@@ -209,7 +211,12 @@ class WelcomeViewModelTests {
         every { mockBTVehicleConnector.currentConnectionState() } returns connectionState
         val spyViewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { spyViewModel.isLocationPermissionEnabled() } returns locationIsEnabled
+        injectTestModule(spyViewModel)
         return spyViewModel
+    }
+
+    private fun injectTestModule(welcomeViewModel: WelcomeViewModel){
+        DaggerTestComponent.builder().build().inject(welcomeViewModel)
     }
 
 }
