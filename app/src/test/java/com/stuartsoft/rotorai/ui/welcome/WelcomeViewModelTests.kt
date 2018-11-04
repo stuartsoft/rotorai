@@ -260,13 +260,6 @@ class WelcomeViewModelTests {
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
     }
 
-    @Ignore
-    @Test
-    fun onClickNeedsBTInitiatesSingleEvent() {
-        //TODO basically, testing that clicking the blue link causes a change on the live data
-        //TODO I don't have the patience to test this right now
-    }
-
     //----- HELPERS BELOW THIS LINE -----
 
 
