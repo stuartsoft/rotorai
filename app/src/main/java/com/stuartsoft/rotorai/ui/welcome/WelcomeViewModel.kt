@@ -39,7 +39,7 @@ open class WelcomeViewModel @Inject constructor(
     fun getDiscoveredDevices() = btDiscoveredDevices
 
     @Bindable("getWelcomeScreenStep")
-    fun isSearching() = btvc.isInDiscoveryMode()
+    fun isSearching() = btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED
 
     @Bindable("getWelcomeScreenStep")
     fun getHeaderMsg(): String? {
@@ -84,7 +84,7 @@ open class WelcomeViewModel @Inject constructor(
                     val genericBTDevice = GenericBTDevice(device)
                     if (genericBTDevice.name != ""){
                         btDiscoveredDevices.add(GenericBTDevice(device))
-                        notifyChange()
+                        notifyPropertyChanged(BR.discoveredDevices)
                     }
                 }
             }

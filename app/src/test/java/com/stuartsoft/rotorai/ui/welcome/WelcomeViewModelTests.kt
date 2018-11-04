@@ -131,7 +131,6 @@ class WelcomeViewModelTests {
                 intArrayOf(-1))
 
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
-        verify (exactly = 0) { viewModel.notifyChange() }
         verify { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
     }
 
@@ -163,12 +162,12 @@ class WelcomeViewModelTests {
 
     @Test
     fun `BT switches from off to on, then on to off`() {
-        //THIS TEST IS A MESS. I really should be mocking the btclasses directly. Shame on me
+        //THIS TEST IS A MESS. I really should be mocking the android bt classes directly. Shame on me
 
         //ARRANGE
         val viewModel = buildSpyViewModel(OFFLINE, true)
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
-        verify (exactly = 0) { viewModel.notifyChange() }
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
         val offToOn = Intent()
         offToOn.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
         offToOn.putExtra(EXTRA_STATE, STATE_ON)
@@ -198,7 +197,7 @@ class WelcomeViewModelTests {
     @Test
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
         injectTestModule(viewModel)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
@@ -209,6 +208,7 @@ class WelcomeViewModelTests {
         viewModel.onReceiveBroadcast(intentA)
 
         assertEquals(1, viewModel.getDiscoveredDevices().count())
+        verify { viewModel.notifyPropertyChanged(BR.discoveredDevices) }
     }
 
     @Test
@@ -256,7 +256,7 @@ class WelcomeViewModelTests {
         intentA.putExtra("asdf", STATE_ON)
         viewModel.onReceiveBroadcast(intentA)
 
-        verify (exactly = 0) { viewModel.notifyChange() }
+        verify (exactly = 0) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
     }
 
