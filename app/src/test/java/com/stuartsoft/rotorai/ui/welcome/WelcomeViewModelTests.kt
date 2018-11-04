@@ -156,7 +156,7 @@ class WelcomeViewModelTests {
         viewModel.beginSearchingForDevices()//try again
 
         //ASSERT
-        verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() } // NO, don't look for devices. There's no BT, ya nerd
+        verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() } //OK Now we are actually ready to search
         assertEquals(0, viewModel.getDiscoveredDevices().count())
     }
 
