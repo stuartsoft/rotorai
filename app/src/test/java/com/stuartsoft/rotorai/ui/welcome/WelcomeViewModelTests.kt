@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
+import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.*
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
@@ -105,12 +106,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun needsBluetoothLinkShouldShow() {
-        //TODO rebuild this test using the multistate screen
-    }
-
-    @Test
-    fun `Start discovering devices when location permission is enabled if bt is already on`() {
+    fun `Location Permission Granted`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
 
@@ -121,11 +117,12 @@ class WelcomeViewModelTests {
 
         verify { mockBTVehicleConnector.startDiscovery() }
         verify { viewModel.notifyChange() }
+        verify { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
 
     }
 
     @Test
-    fun `Dont start discovering devices if location permission is denied`() {
+    fun `Location Permission Denied`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
 
@@ -136,28 +133,65 @@ class WelcomeViewModelTests {
 
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
         verify (exactly = 0) { viewModel.notifyChange() }
+        verify { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
+    }
+
+    @Test
+    fun `Current connection state must be VEHICLE_NOT_CONNECTED to start discovery mode`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        every { mockBTVehicleConnector.currentConnectionState() } returns OFFLINE
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        val someRandomOldDevicePreviouslyDiscovered = GenericBTDevice("asdf", "0000")
+        injectTestModule(viewModel, mutableListOf(someRandomOldDevicePreviouslyDiscovered))
+
+        //ACT
+        viewModel.beginSearchingForDevices()//derp, we should look for devices!
+
+        //ASSERT
+        verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() } // NO, don't look for devices. There's no BT, ya nerd
+        assertEquals(1, viewModel.getDiscoveredDevices().count())
+
+        //ARRANGE
+        every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
+
+        //ACT
+        viewModel.beginSearchingForDevices()//try again
+
+        //ASSERT
+        verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() } // NO, don't look for devices. There's no BT, ya nerd
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
     }
 
     @Test
     fun `Start discovering devices when bt switches from off to on`() {
-        every { mockBTVehicleConnector.startDiscovery() } returns Unit
-        val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
+        //THIS TEST IS A MESS. I really should be mocking the btclasses directly. Shame on me
+
+        //ARRANGE
+        val viewModel = buildSpyViewModel(OFFLINE, true)
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
         verify (exactly = 0) { viewModel.notifyChange() }
+        val offToOn = Intent()
+        offToOn.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
+        offToOn.putExtra(EXTRA_STATE, STATE_ON)
 
-        val intentA = Intent()
-        intentA.putExtra(EXTRA_PREVIOUS_STATE, STATE_OFF)
-        intentA.putExtra(EXTRA_STATE, STATE_ON)
-        viewModel.onReceiveBroadcast(intentA)
+        //ACT
+        every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
+        viewModel.onReceiveBroadcast(offToOn)
 
+        //ASSERT
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
         verify (exactly = 1) { viewModel.notifyChange() }
 
-        val intentB = Intent()
-        intentB.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
-        intentB.putExtra(EXTRA_STATE, STATE_OFF)
-        viewModel.onReceiveBroadcast(intentB)
+        //ARRANGE
+        val onToOff = Intent()
+        onToOff.putExtra(EXTRA_PREVIOUS_STATE, STATE_ON)
+        onToOff.putExtra(EXTRA_STATE, STATE_OFF)
 
+        //ACT
+        every { mockBTVehicleConnector.currentConnectionState() } returns OFFLINE
+        viewModel.onReceiveBroadcast(onToOff)
+
+        //ASSERT
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
     }
 
@@ -202,6 +236,7 @@ class WelcomeViewModelTests {
     @Test
     fun `Clear devices when starting discovery`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         injectTestModule(viewModel, mutableListOf(GenericBTDevice("asdf", "0000")))
 

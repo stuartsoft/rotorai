@@ -8,8 +8,10 @@ import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
+import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.GenericBTDevice
@@ -97,6 +99,7 @@ open class WelcomeViewModel @Inject constructor(
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     fun onRequestPermissionResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        notifyPropertyChanged(BR.welcomeScreenStep)
         for (i in 0..permissions.size-1) {
             if (permissions[i].equals(android.Manifest.permission.ACCESS_COARSE_LOCATION) && grantResults[i] == 0) {
                 beginSearchingForDevices()
@@ -106,10 +109,13 @@ open class WelcomeViewModel @Inject constructor(
 
     //----- HELPERS BELOW THIS LINE -----
 
+    @VisibleForTesting
     fun beginSearchingForDevices() {
-        btDiscoveredDevices = mutableListOf()
-        btvc.startDiscovery()
-        notifyChange()
+        if (btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED) {
+            btDiscoveredDevices = mutableListOf()
+            btvc.startDiscovery()
+            notifyChange()
+        }
     }
 
     enum class WelcomeScreenStep(val i: Int) {
