@@ -38,10 +38,10 @@ open class WelcomeViewModel @Inject constructor(
     @Bindable
     fun getDiscoveredDevices() = btDiscoveredDevices
 
-    @Bindable("getHeaderMsg")
+    @Bindable("getWelcomeScreenStep")
     fun isSearching() = btvc.isInDiscoveryMode()
 
-    @Bindable
+    @Bindable("getWelcomeScreenStep")
     fun getHeaderMsg(): String? {
         return app.getString(when(getWelcomeScreenStep()){
             WelcomeScreenStep.BT_UNAVAILABLE -> R.string.UI_WELCOME_BT_UNAVAILABLE
