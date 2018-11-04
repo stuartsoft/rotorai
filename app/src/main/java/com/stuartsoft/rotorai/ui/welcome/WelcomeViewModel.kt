@@ -72,7 +72,6 @@ open class WelcomeViewModel @Inject constructor(
         intent?.let {
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
-                    notifyChange()
                     if (extraz.getInt(EXTRA_STATE) == STATE_ON) {
                         startDiscovery()
                     }
@@ -83,7 +82,6 @@ open class WelcomeViewModel @Inject constructor(
                     if (genericBTDevice.name != ""){
                         btDiscoveredDevices.add(GenericBTDevice(device))
                         notifyChange()
-                        Timber.d("STULOG NEW DEVICE")
                     }
                 }
             }
