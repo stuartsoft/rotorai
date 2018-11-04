@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.os.Parcelable
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
-import com.stuartsoft.rotorai.BR
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.BTVehicleConnector
 import com.stuartsoft.rotorai.data.GenericBTDevice
@@ -18,7 +17,6 @@ import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -64,7 +62,7 @@ open class WelcomeViewModel @Inject constructor(
 
     override fun setupViewModel() {
         if (isLocationPermissionEnabled() && btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED){
-            startDiscovery()
+            beginSearchingForDevices()
         }
     }
 
@@ -73,7 +71,7 @@ open class WelcomeViewModel @Inject constructor(
             it.extras?.let { extraz ->
                 if (extraz.containsKey(EXTRA_STATE)) {
                     if (extraz.getInt(EXTRA_STATE) == STATE_ON) {
-                        startDiscovery()
+                        beginSearchingForDevices()
                     }
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
@@ -98,7 +96,17 @@ open class WelcomeViewModel @Inject constructor(
 
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    fun startDiscovery() {
+    fun onRequestPermissionResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        for (i in 0..permissions.size-1) {
+            if (permissions[i].equals(android.Manifest.permission.ACCESS_COARSE_LOCATION) && grantResults[i] == 0) {
+                beginSearchingForDevices()
+            }
+        }
+    }
+
+    //----- HELPERS BELOW THIS LINE -----
+
+    fun beginSearchingForDevices() {
         btDiscoveredDevices = mutableListOf()
         btvc.startDiscovery()
         notifyChange()
@@ -114,5 +122,8 @@ open class WelcomeViewModel @Inject constructor(
 
     companion object {
         private const val STATE_KEY = "WelcomeViewModelState"  // NON-NLS
+
+        val REQUEST_TURN_BT_ON = 1
+        val REQUEST_ENABLE_LOCATION_PERMISSION = 2
     }
 }

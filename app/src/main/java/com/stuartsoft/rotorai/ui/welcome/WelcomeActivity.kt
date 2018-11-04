@@ -14,15 +14,14 @@ import androidx.core.app.ActivityCompat
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.ui.BaseActivity
 import com.stuartsoft.rotorai.ui.welcome.WelcomeFragment.WelcomeFragmentHost
+import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
+import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.Companion.REQUEST_TURN_BT_ON
 
 import javax.inject.Inject
 
 class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
     @Inject lateinit var viewModel: WelcomeViewModel
     private lateinit var binding: WelcomeActivityBinding
-
-    val REQUEST_TURN_BT_ON = 1
-    val REQUEST_ENABLE_LOCATION_PERMISSION = 2
 
     private val btFilter = IntentFilter()
     val br = object: BroadcastReceiver() {
@@ -73,7 +72,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        viewModel.notifyChange()
+        viewModel.onRequestPermissionResult(requestCode, permissions, grantResults)
     }
 
     override fun onDestroy() {

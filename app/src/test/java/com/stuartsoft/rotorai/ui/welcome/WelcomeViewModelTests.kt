@@ -8,6 +8,7 @@ import android.content.Intent
 import com.stuartsoft.rotorai.R
 import com.stuartsoft.rotorai.data.*
 import com.stuartsoft.rotorai.data.VehicleConnectionState.*
+import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
 import com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -109,6 +110,35 @@ class WelcomeViewModelTests {
     }
 
     @Test
+    fun `Start discovering devices when location permission is enabled if bt is already on`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
+
+        viewModel.onRequestPermissionResult(
+                REQUEST_ENABLE_LOCATION_PERMISSION,
+                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                intArrayOf(0))
+
+        verify { mockBTVehicleConnector.startDiscovery() }
+        verify { viewModel.notifyChange() }
+
+    }
+
+    @Test
+    fun `Dont start discovering devices if location permission is denied`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
+
+        viewModel.onRequestPermissionResult(
+                REQUEST_ENABLE_LOCATION_PERMISSION,
+                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                intArrayOf(-1))
+
+        verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() }
+        verify (exactly = 0) { viewModel.notifyChange() }
+    }
+
+    @Test
     fun `Start discovering devices when bt switches from off to on`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
@@ -177,7 +207,7 @@ class WelcomeViewModelTests {
 
         assertEquals(1, viewModel.getDiscoveredDevices().count())
 
-        viewModel.startDiscovery()
+        viewModel.beginSearchingForDevices()
 
         assertEquals(0, viewModel.getDiscoveredDevices().count())
     }
