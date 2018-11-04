@@ -116,7 +116,6 @@ class WelcomeViewModelTests {
                 intArrayOf(0))
 
         verify { mockBTVehicleConnector.startDiscovery() }
-        verify { viewModel.notifyChange() }
         verify { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
 
     }
@@ -163,7 +162,7 @@ class WelcomeViewModelTests {
     }
 
     @Test
-    fun `Start discovering devices when bt switches from off to on`() {
+    fun `BT switches from off to on, then on to off`() {
         //THIS TEST IS A MESS. I really should be mocking the btclasses directly. Shame on me
 
         //ARRANGE
@@ -180,7 +179,7 @@ class WelcomeViewModelTests {
 
         //ASSERT
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
-        verify (exactly = 1) { viewModel.notifyChange() }
+        verify (exactly = 1) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
 
         //ARRANGE
         val onToOff = Intent()
@@ -193,6 +192,7 @@ class WelcomeViewModelTests {
 
         //ASSERT
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() }
+        verify (exactly = 2) { viewModel.notifyPropertyChanged(BR.welcomeScreenStep) }
     }
 
     @Test

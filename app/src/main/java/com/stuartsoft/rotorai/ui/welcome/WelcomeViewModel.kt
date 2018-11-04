@@ -35,7 +35,7 @@ open class WelcomeViewModel @Inject constructor(
     @Inject
     lateinit var btDiscoveredDevices: MutableList<GenericBTDevice>
 
-    @Bindable
+    @Bindable("getWelcomeScreenStep")
     fun getDiscoveredDevices() = btDiscoveredDevices
 
     @Bindable("getWelcomeScreenStep")
@@ -74,6 +74,9 @@ open class WelcomeViewModel @Inject constructor(
                 if (extraz.containsKey(EXTRA_STATE)) {
                     if (extraz.getInt(EXTRA_STATE) == STATE_ON) {
                         beginSearchingForDevices()
+                    }
+                    else {
+                        notifyPropertyChanged(BR.welcomeScreenStep)
                     }
                 }
                 if (extraz.containsKey(EXTRA_DEVICE)) {
@@ -114,7 +117,7 @@ open class WelcomeViewModel @Inject constructor(
         if (btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED) {
             btDiscoveredDevices = mutableListOf()
             btvc.startDiscovery()
-            notifyChange()
+            notifyPropertyChanged(BR.welcomeScreenStep)
         }
     }
 
