@@ -45,8 +45,7 @@ class WelcomeFragment : BaseFragment() {
         return binding.root
     }
 
-
-    private class BTDeviceListAdapter : ArrayAdapter<GenericBTDevice, GenericBTDeviceViewHolder>() {
+    private inner class BTDeviceListAdapter : ArrayAdapter<GenericBTDevice, GenericBTDeviceViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericBTDeviceViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding: GenericBTDeviceBinding = DataBindingUtil.inflate(layoutInflater, R.layout.item_generic_bt_device, parent, false)
@@ -59,11 +58,12 @@ class WelcomeFragment : BaseFragment() {
         }
     }
 
-    private class GenericBTDeviceViewHolder(private val binding: GenericBTDeviceBinding):
+    private inner class GenericBTDeviceViewHolder(private val binding: GenericBTDeviceBinding):
     androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GenericBTDevice) {
             binding.item = item
             binding.executePendingBindings()
+            this.itemView.setOnClickListener({viewModel.btDeviceClicked(item)})
         }
     }
 

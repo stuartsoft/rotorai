@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Parcelable
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
@@ -19,6 +21,7 @@ import com.stuartsoft.rotorai.data.VehicleConnectionState.*
 import com.stuartsoft.rotorai.ui.BaseViewModel
 import com.stuartsoft.rotorai.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -120,6 +123,11 @@ open class WelcomeViewModel @Inject constructor(
             btvc.startDiscovery()
             notifyPropertyChanged(BR.welcomeScreenStep)
         }
+    }
+
+    fun btDeviceClicked(item: GenericBTDevice) {
+        Timber.d("STUDEBUG - BT Device clicked " + item.name)
+        Toast.makeText(app.applicationContext, "Connecting to device...", Toast.LENGTH_SHORT).show()
     }
 
     enum class WelcomeScreenStep(val i: Int) {
