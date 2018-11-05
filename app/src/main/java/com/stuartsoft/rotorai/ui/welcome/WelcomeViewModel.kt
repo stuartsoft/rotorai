@@ -116,6 +116,7 @@ open class WelcomeViewModel @Inject constructor(
     fun beginSearchingForDevices() {
         if (btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED) {
             btDiscoveredDevices = mutableListOf()
+            btvc.stopDiscovery()
             btvc.startDiscovery()
             notifyPropertyChanged(BR.welcomeScreenStep)
         }

@@ -137,6 +137,7 @@ class WelcomeViewModelTests {
     @Test
     fun `Current connection state must be VEHICLE_NOT_CONNECTED to start discovery mode`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns OFFLINE
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         val someRandomOldDevicePreviouslyDiscovered = GenericBTDevice("asdf", "0000")
@@ -236,6 +237,7 @@ class WelcomeViewModelTests {
     @Test
     fun `Clear devices when starting discovery`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
         injectTestModule(viewModel, mutableListOf(GenericBTDevice("asdf", "0000")))
@@ -245,6 +247,19 @@ class WelcomeViewModelTests {
         viewModel.beginSearchingForDevices()
 
         assertEquals(0, viewModel.getDiscoveredDevices().count())
+    }
+
+    @Test
+    fun `beginSearchingForDevices`() {
+        //ARRANGE
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
+
+        //ACT
+        viewModel.beginSearchingForDevices()
+
+        //ASSERT
+        verify { mockBTVehicleConnector.stopDiscovery() }
+        verify { mockBTVehicleConnector.startDiscovery() }
     }
 
     @Test
@@ -265,6 +280,7 @@ class WelcomeViewModelTests {
 
     private fun buildSpyViewModel(connectionState: VehicleConnectionState, locationIsEnabled: Boolean): WelcomeViewModel{
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns connectionState
         val spyViewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { spyViewModel.isLocationPermissionEnabled() } returns locationIsEnabled
