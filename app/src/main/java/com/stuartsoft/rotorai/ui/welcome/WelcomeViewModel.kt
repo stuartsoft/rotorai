@@ -36,10 +36,24 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
-    var btDiscoveredDevices: MutableList<GenericBTDevice> = initialListOfItems
+    private var btDiscoveredDevices: MutableList<GenericBTDevice> = initialListOfItems
+
+    var shouldShowSimulatorInList: Boolean = false
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.discoveredDevices)
+        }
 
     @Bindable("getWelcomeScreenStep")
-    fun getDiscoveredDevices() = btDiscoveredDevices
+    fun getDiscoveredDevices(): MutableList<GenericBTDevice> {
+        val list : MutableList<GenericBTDevice> = mutableListOf()
+        if (shouldShowSimulatorInList) {
+            list.add(GenericBTDevice("Simulator Vehicle", "10:20:30:40:50:60"))
+        }
+        list.addAll(btDiscoveredDevices)
+        return list
+    }
+
 
     @Bindable("getWelcomeScreenStep")
     fun isSearching() = btvc.currentConnectionState() == VEHICLE_NOT_CONNECTED

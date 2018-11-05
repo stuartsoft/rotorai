@@ -36,6 +36,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         viewModel = getViewModel(WelcomeViewModel::class)
         viewModel.restoreState(savedInstanceState)
+        viewModel.shouldShowSimulatorInList = true
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_welcome)
         binding.vm = viewModel
@@ -43,7 +44,6 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.title = getString(R.string.app_name)
-
 
         //Add mah intent filters
         btFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)

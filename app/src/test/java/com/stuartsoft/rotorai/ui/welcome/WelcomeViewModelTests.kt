@@ -107,7 +107,6 @@ class WelcomeViewModelTests {
 
     @Test
     fun `Location Permission Granted`() {
-        every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
 
         viewModel.onRequestPermissionResult(
@@ -122,7 +121,6 @@ class WelcomeViewModelTests {
 
     @Test
     fun `Location Permission Denied`() {
-        every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, false)
 
         viewModel.onRequestPermissionResult(
@@ -193,7 +191,6 @@ class WelcomeViewModelTests {
 
     @Test
     fun `New device is discovered`() {
-        every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
@@ -205,6 +202,25 @@ class WelcomeViewModelTests {
 
         assertEquals(1, viewModel.getDiscoveredDevices().count())
         verify { viewModel.notifyPropertyChanged(BR.discoveredDevices) }
+    }
+
+    @Test
+    fun `Show Simulator in device list at the top`() {
+        val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
+
+        val intentA = Intent()
+        val mockdevice : BluetoothDevice = spyk()
+        every { mockdevice.name } returns "lol"
+        intentA.putExtra(EXTRA_DEVICE, mockdevice )
+        viewModel.onReceiveBroadcast(intentA)
+
+        //OK NOW TURN ON THE SIMULATOR TOGGLE
+        viewModel.shouldShowSimulatorInList = true
+
+        assertEquals(2, viewModel.getDiscoveredDevices().count())
+        assertEquals("Simulator Vehicle", viewModel.getDiscoveredDevices()[0].name)
+        assertEquals("lol", viewModel.getDiscoveredDevices()[1].name)
     }
 
     @Test
