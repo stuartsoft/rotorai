@@ -26,7 +26,8 @@ import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
         private val app: Application,
-        private val btvc: BTVehicleConnector)
+        private val btvc: BTVehicleConnector,
+        private val initialListOfItems: MutableList<GenericBTDevice> = mutableListOf())
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
     @Parcelize
@@ -35,8 +36,7 @@ open class WelcomeViewModel @Inject constructor(
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
 
-    @Inject
-    lateinit var btDiscoveredDevices: MutableList<GenericBTDevice>
+    var btDiscoveredDevices: MutableList<GenericBTDevice> = initialListOfItems
 
     @Bindable("getWelcomeScreenStep")
     fun getDiscoveredDevices() = btDiscoveredDevices

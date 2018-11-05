@@ -140,15 +140,12 @@ class WelcomeViewModelTests {
         every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns OFFLINE
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
-        val someRandomOldDevicePreviouslyDiscovered = GenericBTDevice("asdf", "0000")
-        injectTestModule(viewModel, mutableListOf(someRandomOldDevicePreviouslyDiscovered))
 
         //ACT
         viewModel.beginSearchingForDevices()//derp, we should look for devices!
 
         //ASSERT
         verify (exactly = 0) { mockBTVehicleConnector.startDiscovery() } // NO, don't look for devices. There's no BT, ya nerd
-        assertEquals(1, viewModel.getDiscoveredDevices().count())
 
         //ARRANGE
         every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
@@ -158,7 +155,6 @@ class WelcomeViewModelTests {
 
         //ASSERT
         verify (exactly = 1) { mockBTVehicleConnector.startDiscovery() } //OK Now we are actually ready to search
-        assertEquals(0, viewModel.getDiscoveredDevices().count())
     }
 
     @Test
@@ -199,7 +195,6 @@ class WelcomeViewModelTests {
     fun `New device is discovered`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = buildSpyViewModel(VEHICLE_NOT_CONNECTED, true)
-        injectTestModule(viewModel)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
         val intentA = Intent()
@@ -216,7 +211,6 @@ class WelcomeViewModelTests {
     fun `Dont show devices with no name`() {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
-        injectTestModule(viewModel)
         assertEquals(0, viewModel.getDiscoveredDevices().count())
 
         val intentA = Intent()
@@ -239,8 +233,7 @@ class WelcomeViewModelTests {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
-        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
-        injectTestModule(viewModel, mutableListOf(GenericBTDevice("asdf", "0000")))
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector, mutableListOf(GenericBTDevice("asdf", "0000")))
 
         assertEquals(1, viewModel.getDiscoveredDevices().count())
 
@@ -284,14 +277,8 @@ class WelcomeViewModelTests {
         every { mockBTVehicleConnector.currentConnectionState() } returns connectionState
         val spyViewModel = spyk(WelcomeViewModel(app, mockBTVehicleConnector))
         every { spyViewModel.isLocationPermissionEnabled() } returns locationIsEnabled
-        injectTestModule(spyViewModel)
         return spyViewModel
     }
 
-    private fun injectTestModule(welcomeViewModel: WelcomeViewModel, listOfDevices: MutableList<GenericBTDevice> = mutableListOf()){
-        DaggerTestComponent.builder()
-                .testDataModule(TestDataModule(listOfDevices))
-                .build().inject(welcomeViewModel)
-    }
 
 }
