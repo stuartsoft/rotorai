@@ -27,7 +27,7 @@ import javax.inject.Inject
 open class WelcomeViewModel @Inject constructor(
         private val app: Application,
         private val btvc: BTVehicleConnector,
-        private val initialListOfItems: MutableList<GenericBTDevice> = mutableListOf())
+        initialListOfItems: MutableList<GenericBTDevice> = mutableListOf())
     : BaseViewModel<WelcomeViewModel.State>(app, STATE_KEY, State()) {
 
     @Parcelize
