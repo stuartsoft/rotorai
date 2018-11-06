@@ -16,4 +16,5 @@
 
     <string name="UI_WELCOME_DO_IT">Do it</string>
     <string name="UI_WELCOME_ENABLE_LOCATION">Enable Location</string>
+    <string name="connect_to_simulator">Connect to Simulator Instead</string>
 </resources>

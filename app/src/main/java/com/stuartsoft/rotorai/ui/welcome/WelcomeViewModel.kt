@@ -48,7 +48,7 @@ open class WelcomeViewModel @Inject constructor(
     fun getDiscoveredDevices(): MutableList<GenericBTDevice> {
         val list : MutableList<GenericBTDevice> = mutableListOf()
         if (shouldShowSimulatorInList) {
-            list.add(GenericBTDevice("Simulator Vehicle", "10:20:30:40:50:60"))
+            list.add(simulatorDevice)
         }
         list.addAll(btDiscoveredDevices)
         return list
@@ -116,6 +116,15 @@ open class WelcomeViewModel @Inject constructor(
         shouldAskForLocationDialog.value = true
     }
 
+    fun onClickConnectToSimulator() {
+        btDeviceClicked(simulatorDevice)
+    }
+
+    fun btDeviceClicked(item: GenericBTDevice) {
+        Timber.d("STUDEBUG - BT Device clicked " + item.name)
+        Toast.makeText(app.applicationContext, "Connecting to " + item.name, Toast.LENGTH_SHORT).show()
+    }
+
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     fun onRequestPermissionResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -139,11 +148,6 @@ open class WelcomeViewModel @Inject constructor(
         }
     }
 
-    fun btDeviceClicked(item: GenericBTDevice) {
-        Timber.d("STUDEBUG - BT Device clicked " + item.name)
-        Toast.makeText(app.applicationContext, "Connecting to device...", Toast.LENGTH_SHORT).show()
-    }
-
     enum class WelcomeScreenStep(val i: Int) {
         BT_UNAVAILABLE(0),
         ENABLE_LOCATION(1),
@@ -157,5 +161,7 @@ open class WelcomeViewModel @Inject constructor(
 
         val REQUEST_TURN_BT_ON = 1
         val REQUEST_ENABLE_LOCATION_PERMISSION = 2
+
+        val simulatorDevice = GenericBTDevice("Simulator Vehicle", "10:20:30:40:50:60")
     }
 }

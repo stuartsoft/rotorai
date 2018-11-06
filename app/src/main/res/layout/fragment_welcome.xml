@@ -14,6 +14,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/ui_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/normalPadding"
+            android:text="@{vm.headerMsg}"
+            tools:text="lol something is happening"
+            android:textSize="@dimen/header"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
         <LinearLayout
             android:id="@+id/ui_statusFrame"
             android:layout_width="0dp"
@@ -23,15 +36,7 @@
             android:paddingTop="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{vm.headerMsg}"
-                tools:text="lol something is happening"
-                android:textSize="@dimen/header"/>
+            app:layout_constraintTop_toBottomOf="@id/ui_header_text">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -74,12 +79,27 @@
             android:layout_height="0dp"
             android:visibility="@{(vm.WelcomeScreenStep == com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel.WelcomeScreenStep.SELECT_VEHICLE) ? View.VISIBLE : View.GONE}"
             app:items="@{vm.discoveredDevices}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ui_simulator_connect_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ui_statusFrame">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ui_simulator_connect_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:textSize="@dimen/normalText"
+            android:padding="@dimen/normalPadding"
+            android:layout_margin="@dimen/normalPadding"
+            android:layout_gravity="center"
+            android:text="@string/connect_to_simulator"
+            android:onClick="@{() -> vm.onClickConnectToSimulator()}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
