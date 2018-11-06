@@ -36,7 +36,6 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
 
         viewModel = getViewModel(WelcomeViewModel::class)
         viewModel.restoreState(savedInstanceState)
-        viewModel.shouldShowSimulatorInList = true
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_welcome)
         binding.vm = viewModel
