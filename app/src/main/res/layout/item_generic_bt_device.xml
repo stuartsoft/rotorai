@@ -8,7 +8,7 @@
 
         <variable
             name="item"
-            type="com.stuartsoft.rotorai.data.GenericBTDevice"/>
+            type="ai.rotor.mobile.data.GenericBTDevice"/>
     </data>
 
     <androidx.cardview.widget.CardView

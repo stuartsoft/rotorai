@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.ui
+package ai.rotor.mobile.ui
 
 import android.app.Activity
 import android.app.KeyguardManager

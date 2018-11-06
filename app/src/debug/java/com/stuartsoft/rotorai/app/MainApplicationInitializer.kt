@@ -1,11 +1,11 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
 import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 
-import com.stuartsoft.rotorai.ui.RiseAndShine
+import ai.rotor.mobile.ui.RiseAndShine
 
 import timber.log.Timber.Tree
 

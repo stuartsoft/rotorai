@@ -42,7 +42,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId 'com.stuartsoft.rotorai'
+        applicationId 'ai.rotor.mobile'
 
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -56,7 +56,7 @@ android {
         proguardFile getDefaultProguardFile('proguard-android.txt')
         proguardFile 'proguard-rules.pro'
 
-        testInstrumentationRunner 'com.stuartsoft.rotorai.CustomAppTestRunner'
+        testInstrumentationRunner 'ai.rotor.mobile.CustomAppTestRunner'
     }
 
     signingConfigs {
@@ -76,11 +76,11 @@ android {
     productFlavors {
         dev {
             dimension "app"
-            applicationId 'com.stuartsoft.rotorai.dev'
+            applicationId 'ai.rotor.mobile.dev'
         }
         prod {
             dimension "app"
-            applicationId 'com.stuartsoft.rotorai'
+            applicationId 'ai.rotor.mobile'
         }
     }
 
@@ -303,7 +303,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest', 'c
 // Kotlin plugin for testing
 allOpen {
     annotation('dagger.Module')
-    annotation("com.stuartsoft.rotorai.Mockable")
+    annotation("ai.rotor.mobile.Mockable")
 }
 
 apply from: 'generator.gradle'

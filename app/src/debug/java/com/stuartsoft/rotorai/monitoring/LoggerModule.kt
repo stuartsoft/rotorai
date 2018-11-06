@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.monitoring
+package ai.rotor.mobile.monitoring
 
 import dagger.Module
 import dagger.Provides

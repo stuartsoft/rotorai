@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.ui.devsettings
+package ai.rotor.mobile.ui.devsettings
 
 import android.content.Context
 import androidx.databinding.DataBindingUtil
@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.stuartsoft.rotorai.R
-import com.stuartsoft.rotorai.ui.BaseFragment
+import ai.rotor.mobile.R
+import ai.rotor.mobile.ui.BaseFragment
 
 class DevSettingsFragment : BaseFragment() {
     interface DevSettingsFragmentHost

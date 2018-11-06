@@ -6,10 +6,10 @@
         android:allowBackup="false"
         tools:replace="android:allowBackup">
         <activity
-            android:name="com.stuartsoft.rotorai.ui.devsettings.DevSettingsActivity"
+            android:name="ai.rotor.mobile.ui.devsettings.DevSettingsActivity"
             android:label="@string/dev_settings"
             android:theme="@style/AppTheme.NoActionBar"
-            android:taskAffinity="com.stuartsoft.rotorai.dev_settings">
+            android:taskAffinity="ai.rotor.mobile.dev_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

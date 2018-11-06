@@ -1,7 +1,7 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
 
-import com.stuartsoft.rotorai.ui.devsettings.DevSettingsActivity
+import ai.rotor.mobile.ui.devsettings.DevSettingsActivity
 
 interface VariantApplicationComponent {
     fun inject(activity: DevSettingsActivity)

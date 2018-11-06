@@ -1,7 +1,7 @@
-package com.stuartsoft.rotorai.ui
+package ai.rotor.mobile.ui
 
 import androidx.lifecycle.ViewModel
-import com.stuartsoft.rotorai.ui.devsettings.DevSettingsViewModel
+import ai.rotor.mobile.ui.devsettings.DevSettingsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

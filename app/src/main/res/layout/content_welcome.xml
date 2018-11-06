@@ -1,7 +1,7 @@
 <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:name="com.stuartsoft.rotorai.ui.welcome.WelcomeFragment"
+        android:name="ai.rotor.mobile.ui.welcome.WelcomeFragment"
         android:id="@+id/fragment_welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

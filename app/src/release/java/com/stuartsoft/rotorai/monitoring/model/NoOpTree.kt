@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.monitoring.model
+package ai.rotor.mobile.monitoring.model
 
 import timber.log.Timber
 

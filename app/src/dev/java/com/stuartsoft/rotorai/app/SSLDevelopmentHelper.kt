@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
 import android.annotation.SuppressLint
 import okhttp3.OkHttpClient

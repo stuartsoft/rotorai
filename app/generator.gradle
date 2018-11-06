@@ -1,5 +1,5 @@
 // Usage:
-// ./gradlew app:screen -Ppackage=com.stuartsoft.rotorai -Pscreen=Login
+// ./gradlew app:screen -Ppackage=ai.rotor.mobile -Pscreen=Login
 
 import com.github.mustachejava.DefaultMustacheFactory
 import com.google.common.base.CaseFormat

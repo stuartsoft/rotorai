@@ -1,4 +1,4 @@
-package com.stuartsoft.rotorai.ui
+package ai.rotor.mobile.ui
 
 import dagger.Module
 

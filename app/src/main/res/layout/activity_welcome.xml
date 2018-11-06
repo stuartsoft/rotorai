@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data class="com.stuartsoft.rotorai.ui.welcome.WelcomeActivityBinding">
+    <data class="ai.rotor.mobile.ui.welcome.WelcomeActivityBinding">
         <variable
                 name="vm"
-                type="com.stuartsoft.rotorai.ui.welcome.WelcomeViewModel"/>
+                type="ai.rotor.mobile.ui.welcome.WelcomeViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -1,3 +1,3 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
 interface VariantApplicationComponent

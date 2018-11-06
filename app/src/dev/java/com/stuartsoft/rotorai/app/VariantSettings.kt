@@ -1,9 +1,9 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
 import android.content.Context
 import android.text.TextUtils
-import com.stuartsoft.rotorai.R
-import com.stuartsoft.rotorai.util.putOrClearPreference
+import ai.rotor.mobile.R
+import ai.rotor.mobile.util.putOrClearPreference
 
 open class VariantSettings(private val context: Context) {
 

@@ -1,6 +1,6 @@
-package com.stuartsoft.rotorai.modules
+package ai.rotor.mobile.modules
 
-import com.stuartsoft.rotorai.monitoring.LoggingOnlyCrashReporter
+import ai.rotor.mobile.monitoring.LoggingOnlyCrashReporter
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

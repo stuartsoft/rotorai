@@ -1,6 +1,6 @@
-package com.stuartsoft.rotorai.app
+package ai.rotor.mobile.app
 
-import com.stuartsoft.rotorai.data.OkHttpSecurityModifier
+import ai.rotor.mobile.data.OkHttpSecurityModifier
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

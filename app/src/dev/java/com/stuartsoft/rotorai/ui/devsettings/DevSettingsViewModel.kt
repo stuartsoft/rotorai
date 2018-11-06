@@ -1,11 +1,11 @@
-package com.stuartsoft.rotorai.ui.devsettings
+package ai.rotor.mobile.ui.devsettings
 
 import android.app.Application
 import androidx.databinding.Bindable
 import android.os.Parcelable
-import com.stuartsoft.rotorai.BR
-import com.stuartsoft.rotorai.app.Settings
-import com.stuartsoft.rotorai.ui.BaseViewModel
+import ai.rotor.mobile.BR
+import ai.rotor.mobile.app.Settings
+import ai.rotor.mobile.ui.BaseViewModel
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 

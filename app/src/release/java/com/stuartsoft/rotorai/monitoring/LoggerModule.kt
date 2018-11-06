@@ -1,6 +1,6 @@
-package com.stuartsoft.rotorai.monitoring
+package ai.rotor.mobile.monitoring
 
-import com.stuartsoft.rotorai.monitoring.model.NoOpTree
+import ai.rotor.mobile.monitoring.model.NoOpTree
 import dagger.Module
 import dagger.Provides
 import timber.log.Timber
