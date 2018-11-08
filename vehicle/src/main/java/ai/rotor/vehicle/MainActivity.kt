@@ -3,7 +3,12 @@ package ai.rotor.vehicle
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothServerSocket
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import timber.log.Timber
+import java.util.*
 
 /**
  * Skeleton of an Android Things activity.
@@ -31,6 +36,20 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val bluetoothServerSocket: BluetoothServerSocket = BluetoothAdapter.getDefaultAdapter().listenUsingRfcommWithServiceRecord()
+        Timber.d("STUDEBUG - Starting up")
+
+        val btAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+        if (!btAdapter.isEnabled) {
+            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_TURN_BT_ON)
+        }
+
+        startForegroundService(BTListenForConnectionIntent.makeIntent(this))
+
+    }
+
+    companion object {
+        val REQUEST_TURN_BT_ON = 1
+        val REQUEST_ENABLE_LOCATION_PERMISSION = 2
     }
 }
