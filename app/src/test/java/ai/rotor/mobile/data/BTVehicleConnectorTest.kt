@@ -3,8 +3,9 @@ package ai.rotor.mobile.data
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +17,7 @@ class BTVehicleConnectorTest {
     @MockK
     private val mockRotorBTAdapterWrapper : RotorBTAdapterWrapper = mockk()
 
-    private val connector = BTVehicleConnector(mockRotorBTAdapterWrapper)
+    private var connector = BTVehicleConnector(mockRotorBTAdapterWrapper)
 
     @Before
     fun setUp() {
@@ -52,7 +53,7 @@ class BTVehicleConnectorTest {
         every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
         every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
-                listOf(buildMockBTDevice("lmao", "1234"))
+                listOf(GenericBTDevice("lmao", "1234"))
 
         assertEquals(VehicleConnectionState.VEHICLE_NOT_CONNECTED, connector.currentConnectionState())
     }
@@ -62,7 +63,7 @@ class BTVehicleConnectorTest {
         every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
         every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
-                listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"))
+                listOf(GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"))
 
         assertEquals(VehicleConnectionState.READY_VEHICLE_CONNECTED, connector.currentConnectionState())
     }
@@ -72,12 +73,37 @@ class BTVehicleConnectorTest {
         every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
         every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
-                listOf(buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"),
-                        buildMockBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME+"1", "5678"))
+                listOf(GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234"),
+                        GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME+"1", "5678"))
 
         assertEquals(VehicleConnectionState.TOO_MANY_VEHICLES_CONNECTED, connector.currentConnectionState())
     }
 
+    @Test
+    fun connectToVehicleHappyPath() {
+        //TODO GOTTA COME BACK TO THIS, IT'S NOT ACTUALLY CONNECTING RIGHT NOW LOL
+
+        connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
+
+        val genericBTDevice = GenericBTDevice("Some random vehicle (RTR001)", "0000")
+        val mockCallback = spyk<(Boolean) -> Unit>()
+        connector.connectTo(genericBTDevice, mockCallback)
+
+        verify { mockCallback.invoke(true) }
+    }
+
+    @Test
+    fun connectToVehicleSadPath() {
+        //TODO GOTTA COME BACK TO THIS, IT'S NOT ACTUALLY CONNECTING RIGHT NOW LOL
+
+        connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
+
+        val genericBTDevice = GenericBTDevice("MahHeadphones", "0000")
+        val mockCallback = spyk<(Boolean) -> Unit>()
+        connector.connectTo(genericBTDevice, mockCallback)
+
+        verify { mockCallback.invoke(false) }
+    }
 
     @Test
     fun beginBTDeviceDiscovery() {
@@ -91,10 +117,6 @@ class BTVehicleConnectorTest {
 
     //----- HELPER METHODS BELOW HERE -----
 
-
-    private fun buildMockBTDevice(name: String, address: String): GenericBTDevice {
-        return GenericBTDevice(name, address)
-    }
 
 
 
