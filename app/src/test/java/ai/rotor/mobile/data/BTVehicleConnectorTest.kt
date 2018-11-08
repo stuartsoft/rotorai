@@ -106,6 +106,19 @@ class BTVehicleConnectorTest {
     }
 
     @Test
+    fun connectToVehicleSimulator() {
+        //TODO GOTTA COME BACK TO THIS, IT'S NOT ACTUALLY CONNECTING RIGHT NOW LOL
+
+        connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
+
+        val genericBTDevice = GenericBTDevice("4x4 Simulator", "0000")
+        val mockCallback = spyk<(Boolean) -> Unit>()
+        connector.connectTo(genericBTDevice, mockCallback)
+
+        verify { mockCallback.invoke(true) }
+    }
+
+    @Test
     fun beginBTDeviceDiscovery() {
         every { mockRotorBTAdapterWrapper.startDiscovery() } returns Unit
         verify (exactly = 0) { mockRotorBTAdapterWrapper.startDiscovery() }
