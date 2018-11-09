@@ -2,13 +2,9 @@ package ai.rotor.vehicle
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothServerSocket
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import timber.log.Timber
-import java.util.*
 
 /**
  * Skeleton of an Android Things activity.
@@ -41,15 +37,37 @@ class MainActivity : Activity() {
         val btAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         if (!btAdapter.isEnabled) {
-            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_TURN_BT_ON)
+            turnBTRadioON()
+        }
+        else {
+            startDiscoverability()
         }
 
-        startForegroundService(BTListenForConnectionIntent.makeIntent(this))
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_TURN_BT_ON) {
+            //START DISCOVERABILITY...
+            startDiscoverability()
+        }
+        else if (requestCode == REQUEST_MAKE_DISCOVERABLE){
+            //Open a btSocket on an intent service, awaiting connection...
+            startService(BTListenForConnectionIS.makeIntent(this))
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun turnBTRadioON(){
+        startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_TURN_BT_ON)
+    }
+
+    fun startDiscoverability() {
+        startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply { putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 15) }, REQUEST_MAKE_DISCOVERABLE)
     }
 
     companion object {
         val REQUEST_TURN_BT_ON = 1
-        val REQUEST_ENABLE_LOCATION_PERMISSION = 2
+        val REQUEST_MAKE_DISCOVERABLE = 2
     }
 }
