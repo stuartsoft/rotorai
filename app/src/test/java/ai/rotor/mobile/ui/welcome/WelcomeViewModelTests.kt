@@ -24,6 +24,7 @@ import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class WelcomeViewModelTests {
@@ -219,7 +220,7 @@ class WelcomeViewModelTests {
         viewModel.shouldShowSimulatorInList = true
 
         assertEquals(2, viewModel.getDiscoveredDevices().count())
-        assertEquals("Simulator Vehicle", viewModel.getDiscoveredDevices()[0].name)
+        assertEquals("4x4 Simulator", viewModel.getDiscoveredDevices()[0].name)
         assertEquals("lol", viewModel.getDiscoveredDevices()[1].name)
     }
 
@@ -249,7 +250,7 @@ class WelcomeViewModelTests {
         every { mockBTVehicleConnector.startDiscovery() } returns Unit
         every { mockBTVehicleConnector.stopDiscovery() } returns Unit
         every { mockBTVehicleConnector.currentConnectionState() } returns VEHICLE_NOT_CONNECTED
-        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector, mutableListOf(GenericBTDevice("asdf", "0000")))
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector, mutableListOf(GenericBTDevice("asdf", "0000", UUID.randomUUID())))
 
         assertEquals(1, viewModel.getDiscoveredDevices().count())
 

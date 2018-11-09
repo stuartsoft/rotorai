@@ -2,6 +2,7 @@ package ai.rotor.mobile.data
 
 import android.bluetooth.BluetoothDevice
 import ai.rotor.mobile.data.VehicleConnectionState.*
+import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.simulatorDevice
 import javax.inject.Inject
 
 class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: RotorBTAdapterWrapper ): VehicleConnector() {
@@ -40,10 +41,10 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
     }
 
     fun connectTo(genericBTDevice: GenericBTDevice, callback: (didSucceed: Boolean)-> Unit) {
-        if(genericBTDevice.name.contains(Regex("(RTR.\\d)"))){
+        if(genericBTDevice.name.contains(Regex("(RTR.\\d)"))) {
             callback(true)
         }
-        else if (genericBTDevice.name.toLowerCase().contains(Regex("simulator"))){
+        else if (simulatorDevice.equals(genericBTDevice)){
             callback(true)
         }
         else {

@@ -9,7 +9,7 @@ class RotorBTAdapterWrapper @Inject constructor(private val btAdapter: Bluetooth
 
     fun getBondedDeviceNamesAndAddress(): List<GenericBTDevice> =
         btAdapter?.let {
-            it.bondedDevices.map { device -> GenericBTDevice(device.name, device.address) }
+            it.bondedDevices.map { device -> GenericBTDevice(device) }
         } ?: listOf()
 
 

@@ -17,6 +17,9 @@ import ai.rotor.mobile.BR
 import ai.rotor.mobile.R
 import ai.rotor.mobile.data.BTVehicleConnector
 import ai.rotor.mobile.data.GenericBTDevice
+import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_MAC
+import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_NAME
+import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_UUID
 import ai.rotor.mobile.data.VehicleConnectionState.*
 import ai.rotor.mobile.ui.BaseViewModel
 import ai.rotor.mobile.ui.SingleLiveEvent
@@ -162,6 +165,6 @@ open class WelcomeViewModel @Inject constructor(
         val REQUEST_TURN_BT_ON = 1
         val REQUEST_ENABLE_LOCATION_PERMISSION = 2
 
-        val simulatorDevice = GenericBTDevice("Simulator Vehicle", "10:20:30:40:50:60")
+        val simulatorDevice = GenericBTDevice(SIMULATOR_NAME, SIMULATOR_MAC, SIMULATOR_UUID)
     }
 }
