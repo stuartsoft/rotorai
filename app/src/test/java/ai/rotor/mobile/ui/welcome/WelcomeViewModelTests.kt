@@ -11,6 +11,7 @@ import ai.rotor.mobile.data.*
 import ai.rotor.mobile.data.VehicleConnectionState.*
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
+import android.os.ParcelUuid
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -243,6 +244,34 @@ class WelcomeViewModelTests {
         viewModel.onReceiveBroadcast(intentB)
 
         assertEquals(0, viewModel.getDiscoveredDevices().count())
+    }
+
+    @Test
+    fun `Dont show duplicate devices`() {
+        every { mockBTVehicleConnector.startDiscovery() } returns Unit
+        val viewModel = WelcomeViewModel(app, mockBTVehicleConnector)
+        assertEquals(0, viewModel.getDiscoveredDevices().count())
+        val dName = "DeviceA"
+        val dAddress = "11:22:33:44:55:66"
+        val dUUID = UUID.randomUUID()
+
+        val intentA = Intent()
+        val mockDeviceA : BluetoothDevice = spyk()
+        every { mockDeviceA.name } returns dName
+        every { mockDeviceA.address } returns dAddress
+        every { mockDeviceA.uuids } returns arrayOf(ParcelUuid(dUUID))
+        intentA.putExtra(EXTRA_DEVICE, mockDeviceA )
+        viewModel.onReceiveBroadcast(intentA)
+
+        val intentB = Intent()
+        val mockDeviceB : BluetoothDevice = spyk()
+        every { mockDeviceB.name } returns dName
+        every { mockDeviceB.address } returns dAddress
+        every { mockDeviceB.uuids } returns arrayOf(ParcelUuid(dUUID))
+        intentB.putExtra(EXTRA_DEVICE, mockDeviceB )
+        viewModel.onReceiveBroadcast(intentB)
+
+        assertEquals(1, viewModel.getDiscoveredDevices().count())
     }
 
     @Test

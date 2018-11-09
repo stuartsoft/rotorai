@@ -103,8 +103,10 @@ open class WelcomeViewModel @Inject constructor(
                     val device = intent.getParcelableExtra<BluetoothDevice>(EXTRA_DEVICE)
                     val genericBTDevice = GenericBTDevice(device)
                     if (genericBTDevice.name != ""){
-                        btDiscoveredDevices.add(GenericBTDevice(device))
-                        notifyPropertyChanged(BR.discoveredDevices)
+                        if (!btDiscoveredDevices.contains(genericBTDevice)) {
+                            btDiscoveredDevices.add(GenericBTDevice(device))
+                            notifyPropertyChanged(BR.discoveredDevices)
+                        }
                     }
                 }
             }
