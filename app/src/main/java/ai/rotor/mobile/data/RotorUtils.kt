@@ -3,6 +3,7 @@ package ai.rotor.mobile.data
 class RotorUtils {
 
     companion object {
-        const val DEFAULT_VEHICLE_NAME = "RotorVehicle"
+
+        val VEHICLE_NAME_REGEX = Regex("RTR.\\d")
     }
 }

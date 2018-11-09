@@ -18,12 +18,11 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
         }
 
         val numberOfConnectedVehicles = rotorBTAdapterWrapper.getBondedDeviceNamesAndAddress().fold(0)
-        { acc, device -> if (device.name.contains(RotorUtils.DEFAULT_VEHICLE_NAME)) acc+1 else acc }
+        { acc, device -> if (device.name.contains(RotorUtils.VEHICLE_NAME_REGEX)) acc+1 else acc }
 
         return when(numberOfConnectedVehicles) {
                     1 ->    READY_VEHICLE_CONNECTED
-                    0 ->    VEHICLE_NOT_CONNECTED
-                    else -> TOO_MANY_VEHICLES_CONNECTED
+                    else ->    VEHICLE_NOT_CONNECTED
                 }
 
     }

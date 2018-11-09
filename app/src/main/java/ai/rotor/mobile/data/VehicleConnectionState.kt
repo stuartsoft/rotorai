@@ -12,9 +12,6 @@ enum class VehicleConnectionState {
     //we are connected to nothing, or we are connected to a non-vehicle device (example: earbuds)
     VEHICLE_NOT_CONNECTED,
 
-    //if, for some reason, there are more than 1 vehicles connected! #panic
-    TOO_MANY_VEHICLES_CONNECTED,
-
     //good to go! let's roll
     READY_VEHICLE_CONNECTED,
 }

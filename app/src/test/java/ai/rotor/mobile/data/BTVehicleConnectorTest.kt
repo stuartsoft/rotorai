@@ -68,20 +68,9 @@ class BTVehicleConnectorTest {
         every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
         every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
         every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
-                listOf(GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234", UUID.randomUUID()))
+                listOf(GenericBTDevice("MahAwesomeCarRTR001", "1234", UUID.randomUUID()))
 
         assertEquals(VehicleConnectionState.READY_VEHICLE_CONNECTED, connector.currentConnectionState())
-    }
-
-    @Test
-    fun bluetoothOnTooManyConnectedVehicles() {
-        every { mockRotorBTAdapterWrapper.isBluetoothRadioAvailable() } returns true
-        every { mockRotorBTAdapterWrapper.isBluetoothRadioOn() } returns true
-        every { mockRotorBTAdapterWrapper.getBondedDeviceNamesAndAddress() } returns
-                listOf(GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME, "1234", UUID.fromString("1b14c657-e073-4432-a633-487233362fb2")),
-                        GenericBTDevice(RotorUtils.DEFAULT_VEHICLE_NAME+"1", "5678", UUID.fromString("2c14c657-e073-4432-a633-487233362fb2")))
-
-        assertEquals(VehicleConnectionState.TOO_MANY_VEHICLES_CONNECTED, connector.currentConnectionState())
     }
 
     @Test
