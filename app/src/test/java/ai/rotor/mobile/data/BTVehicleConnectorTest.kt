@@ -1,8 +1,6 @@
 package ai.rotor.mobile.data
 
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_MAC
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_NAME
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_UUID
+import ai.rotor.commonstuff.GenericBTDevice
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

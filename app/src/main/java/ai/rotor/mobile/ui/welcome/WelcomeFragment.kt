@@ -1,19 +1,18 @@
 package ai.rotor.mobile.ui.welcome
 
+import ai.rotor.commonstuff.GenericBTDevice
+import ai.rotor.mobile.GenericBTDeviceBinding
+import ai.rotor.mobile.R
+import ai.rotor.mobile.ui.BaseFragment
+import ai.rotor.mobile.util.recyclerview.ArrayAdapter
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
-import ai.rotor.mobile.GenericBTDeviceBinding
-import ai.rotor.mobile.ui.BaseFragment
-
-import ai.rotor.mobile.R
-import ai.rotor.mobile.data.GenericBTDevice
-import ai.rotor.mobile.util.recyclerview.ArrayAdapter
 
 class WelcomeFragment : BaseFragment() {
     interface WelcomeFragmentHost

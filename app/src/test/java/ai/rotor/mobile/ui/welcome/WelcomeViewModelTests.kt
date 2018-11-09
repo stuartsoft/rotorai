@@ -1,16 +1,18 @@
 package ai.rotor.mobile.ui.welcome
 
+import ai.rotor.commonstuff.GenericBTDevice
+import ai.rotor.mobile.BR
+import ai.rotor.mobile.R
+import ai.rotor.mobile.data.BTVehicleConnector
+import ai.rotor.mobile.data.VehicleConnectionState
+import ai.rotor.mobile.data.VehicleConnectionState.*
+import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
+import ai.rotor.mobile.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
 import android.app.Application
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
-import ai.rotor.mobile.BR
-import ai.rotor.mobile.R
-import ai.rotor.mobile.data.*
-import ai.rotor.mobile.data.VehicleConnectionState.*
-import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
-import ai.rotor.mobile.ui.welcome.WelcomeViewModel.WelcomeScreenStep.*
 import android.os.ParcelUuid
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -19,7 +21,6 @@ import io.mockk.spyk
 import io.mockk.verify
 import junit.framework.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations

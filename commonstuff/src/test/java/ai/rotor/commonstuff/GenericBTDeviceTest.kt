@@ -1,12 +1,12 @@
-package ai.rotor.mobile.data
+package ai.rotor.commonstuff
 
 import android.bluetooth.BluetoothDevice
 import android.os.ParcelUuid
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.internalSubstitute
 import io.mockk.mockk
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

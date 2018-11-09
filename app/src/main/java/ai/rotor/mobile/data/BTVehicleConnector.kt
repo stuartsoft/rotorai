@@ -1,6 +1,7 @@
 package ai.rotor.mobile.data
 
-import android.bluetooth.BluetoothDevice
+import ai.rotor.commonstuff.GenericBTDevice
+import ai.rotor.commonstuff.RotorUtils
 import ai.rotor.mobile.data.VehicleConnectionState.*
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.simulatorDevice
 import javax.inject.Inject

@@ -1,5 +1,9 @@
 package ai.rotor.mobile.ui.welcome
 
+import ai.rotor.commonstuff.GenericBTDevice
+import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_MAC
+import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_NAME
+import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_UUID
 import android.app.Application
 import android.bluetooth.BluetoothAdapter.EXTRA_STATE
 import android.bluetooth.BluetoothAdapter.STATE_ON
@@ -8,7 +12,6 @@ import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Parcelable
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
@@ -16,10 +19,6 @@ import androidx.databinding.Bindable
 import ai.rotor.mobile.BR
 import ai.rotor.mobile.R
 import ai.rotor.mobile.data.BTVehicleConnector
-import ai.rotor.mobile.data.GenericBTDevice
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_MAC
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_NAME
-import ai.rotor.mobile.data.GenericBTDevice.Companion.SIMULATOR_UUID
 import ai.rotor.mobile.data.VehicleConnectionState.*
 import ai.rotor.mobile.ui.BaseViewModel
 import ai.rotor.mobile.ui.SingleLiveEvent

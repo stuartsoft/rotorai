@@ -1,5 +1,6 @@
 package ai.rotor.mobile.data
 
+import ai.rotor.commonstuff.GenericBTDevice
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import com.squareup.moshi.Moshi

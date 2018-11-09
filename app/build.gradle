@@ -136,12 +136,15 @@ ext {
 
     // Test dependency versions
     mockitoVersion = '2.13.0'
-    robolectricVersion = '3.7.1'
     androidTestSupportVersion = '1.0.1'
     espressoVersion = '3.0.2'
 }
 
 dependencies {
+
+    //STUs AWESOME LIBRARY
+    implementation project(":commonstuff")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Need this because of Kotlin
 

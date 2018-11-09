@@ -1,4 +1,4 @@
-package ai.rotor.mobile.data
+package ai.rotor.commonstuff
 
 import android.bluetooth.BluetoothDevice
 import java.util.*
