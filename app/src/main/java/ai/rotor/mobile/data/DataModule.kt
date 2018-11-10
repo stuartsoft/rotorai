@@ -1,10 +1,10 @@
 package ai.rotor.mobile.data
 
 import ai.rotor.commonstuff.GenericBTDevice
+import ai.rotor.mobile.app.Settings
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import com.squareup.moshi.Moshi
-import ai.rotor.mobile.app.Settings
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -68,7 +68,7 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideBTAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    fun provideBTAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     @Singleton
     @Provides
