@@ -2,8 +2,12 @@ package ai.rotor.vehicle
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Bundle
+import com.google.android.things.bluetooth.BluetoothConnectionManager
+import com.google.android.things.bluetooth.BluetoothPairingCallback
+import com.google.android.things.bluetooth.PairingParams
 import timber.log.Timber
 
 /**
@@ -33,6 +37,8 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
 
         Timber.d("STUDEBUG - Starting up")
+        BluetoothAdapter.getDefaultAdapter().name = BTListenForConnectionIS.VEHICLE_NAME
+
 
         val btAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
@@ -43,6 +49,23 @@ class MainActivity : Activity() {
             startDiscoverability()
         }
 
+        BluetoothConnectionManager.getInstance().registerPairingCallback(object : BluetoothPairingCallback {
+            override fun onUnpaired(bluetoothDevice: BluetoothDevice?) {
+            }
+
+            override fun onPairingError(bluetoothDevice: BluetoothDevice?, error: BluetoothPairingCallback.PairingError?) {
+            }
+
+            override fun onPairingInitiated(bluetoothDevice: BluetoothDevice?, pairingParams: PairingParams?) {
+                val okToPair = true
+                if (okToPair) {
+                    BluetoothConnectionManager.getInstance().finishPairing(bluetoothDevice)
+                }
+            }
+
+            override fun onPaired(bluetoothDevice: BluetoothDevice?) {
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,12 +81,12 @@ class MainActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    fun turnBTRadioON(){
+    private fun turnBTRadioON(){
         startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_TURN_BT_ON)
     }
 
-    fun startDiscoverability() {
-        startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply { putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 15) }, REQUEST_MAKE_DISCOVERABLE)
+    private fun startDiscoverability() {
+        startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply { putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 60) }, REQUEST_MAKE_DISCOVERABLE)
     }
 
     companion object {
