@@ -4,6 +4,12 @@ import ai.rotor.commonstuff.GenericBTDevice
 import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_MAC
 import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_NAME
 import ai.rotor.commonstuff.GenericBTDevice.Companion.SIMULATOR_UUID
+import ai.rotor.mobile.BR
+import ai.rotor.mobile.R
+import ai.rotor.mobile.data.BTVehicleConnector
+import ai.rotor.mobile.data.VehicleConnectionState.*
+import ai.rotor.mobile.ui.BaseViewModel
+import ai.rotor.mobile.ui.SingleLiveEvent
 import android.app.Application
 import android.bluetooth.BluetoothAdapter.EXTRA_STATE
 import android.bluetooth.BluetoothAdapter.STATE_ON
@@ -12,16 +18,9 @@ import android.bluetooth.BluetoothDevice.EXTRA_DEVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Parcelable
-import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
-import ai.rotor.mobile.BR
-import ai.rotor.mobile.R
-import ai.rotor.mobile.data.BTVehicleConnector
-import ai.rotor.mobile.data.VehicleConnectionState.*
-import ai.rotor.mobile.ui.BaseViewModel
-import ai.rotor.mobile.ui.SingleLiveEvent
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
@@ -126,7 +125,7 @@ open class WelcomeViewModel @Inject constructor(
 
     fun btDeviceClicked(item: GenericBTDevice) {
         Timber.d("STUDEBUG - BT Device clicked " + item.name)
-        Toast.makeText(app.applicationContext, "Connecting to " + item.name, Toast.LENGTH_SHORT).show()
+        btvc.connectTo(item) { this.connectionCalback(it) }
     }
 
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -141,6 +140,12 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     //----- HELPERS BELOW THIS LINE -----
+
+    private fun connectionCalback(successful: Boolean) {
+        if (successful) {
+            //Open the controller activity
+        }
+    }
 
     @VisibleForTesting
     fun beginSearchingForDevices() {
