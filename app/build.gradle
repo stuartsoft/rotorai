@@ -149,9 +149,9 @@ dependencies {
     // Need this because of Kotlin
 
     // Android/Google libraries
-    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.core:core-ktx:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.annotation:annotation:1.0.0'
@@ -206,10 +206,10 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 
     // Android JUnit Runner, JUnit Rules, and Espresso
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test:rules:1.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
 
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
