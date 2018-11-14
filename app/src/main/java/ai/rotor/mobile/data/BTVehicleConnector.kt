@@ -2,6 +2,7 @@ package ai.rotor.mobile.data
 
 import ai.rotor.commonstuff.GenericBTDevice
 import ai.rotor.commonstuff.RotorUtils
+import ai.rotor.commonstuff.RotorUtils.Companion.VEHICLE_NAME_REGEX
 import ai.rotor.mobile.data.VehicleConnectionState.*
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.simulatorDevice
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
     }
 
     fun isValidBTDeviceToConnectTo(genericBTDevice: GenericBTDevice) = when {
-        genericBTDevice.name.contains(Regex("(RTR.\\d)")) -> true
+        genericBTDevice.name.contains(VEHICLE_NAME_REGEX) -> true
         simulatorDevice == genericBTDevice -> true
         else -> false
     }
