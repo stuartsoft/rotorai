@@ -1,22 +1,21 @@
 package ai.rotor.mobile.ui.welcome
 
-import androidx.lifecycle.Observer
+import ai.rotor.mobile.R
+import ai.rotor.mobile.ui.BaseActivity
+import ai.rotor.mobile.ui.remotecontrol.RemoteControlActivity
+import ai.rotor.mobile.ui.welcome.WelcomeFragment.WelcomeFragmentHost
+import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
+import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_TURN_BT_ON
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
-
-import ai.rotor.mobile.R
-import ai.rotor.mobile.ui.BaseActivity
-import ai.rotor.mobile.ui.welcome.WelcomeFragment.WelcomeFragmentHost
-import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
-import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_TURN_BT_ON
-
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import javax.inject.Inject
 
 class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
@@ -49,13 +48,18 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         btFilter.addAction(BluetoothDevice.ACTION_FOUND)
         registerReceiver(br, btFilter)
 
-        viewModel.shouldShowBTDialog.observe(this, Observer<Boolean> {
+        viewModel.shouldShowBTDialog.observe(this, Observer {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_TURN_BT_ON)
         })
 
-        viewModel.shouldAskForLocationDialog.observe(this, Observer<Boolean> {
+        viewModel.shouldAskForLocationDialog.observe(this, Observer {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_ENABLE_LOCATION_PERMISSION)
+        })
+
+        viewModel.readyToStartRemoteControl.observe(this, Observer {
+            startActivity(RemoteControlActivity.buildIntent(this))
+            finish()
         })
     }
 

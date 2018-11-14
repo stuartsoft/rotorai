@@ -5,6 +5,7 @@ import ai.rotor.mobile.modules.CrashReporterModule
 import ai.rotor.mobile.monitoring.LoggerModule
 import ai.rotor.mobile.ui.ViewModelFactoryModule
 import ai.rotor.mobile.ui.welcome.WelcomeActivity
+import ai.rotor.mobile.ui.remotecontrol.RemoteControlActivity
 // GENERATOR - MORE IMPORTS //
 import dagger.Component
 import javax.inject.Singleton
@@ -22,5 +23,6 @@ interface ApplicationComponent : VariantApplicationComponent {
     fun inject(application: MainApplication)
 
     fun inject(activity: WelcomeActivity)
+    fun inject(activity: RemoteControlActivity)
     // GENERATOR - MORE ACTIVITIES //
 }

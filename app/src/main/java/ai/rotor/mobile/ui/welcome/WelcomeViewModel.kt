@@ -36,6 +36,7 @@ open class WelcomeViewModel @Inject constructor(
 
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
+    var readyToStartRemoteControl = SingleLiveEvent<Boolean>()
 
     private var btDiscoveredDevices: MutableList<GenericBTDevice> = initialListOfItems
 
@@ -144,6 +145,7 @@ open class WelcomeViewModel @Inject constructor(
     private fun connectionCalback(successful: Boolean) {
         if (successful) {
             //Open the controller activity
+            readyToStartRemoteControl.value = true
         }
     }
 
