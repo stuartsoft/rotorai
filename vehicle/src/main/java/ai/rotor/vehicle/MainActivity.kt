@@ -33,6 +33,8 @@ import timber.log.Timber
  */
 class MainActivity : Activity() {
 
+    private val mahBTPairingCallback = BTPairingCallback()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -53,26 +55,7 @@ class MainActivity : Activity() {
             startDiscoverability()
         }
 
-        BluetoothConnectionManager.getInstance().registerPairingCallback(object : BluetoothPairingCallback {
-            override fun onUnpaired(bluetoothDevice: BluetoothDevice?) {
-            }
-
-            override fun onPairingError(bluetoothDevice: BluetoothDevice?, error: BluetoothPairingCallback.PairingError?) {
-            }
-
-            override fun onPairingInitiated(bluetoothDevice: BluetoothDevice?, pairingParams: PairingParams?) {
-                val okToPair = bluetoothDevice?.name.equals("Essential Phone")
-                if (okToPair) {
-                    BluetoothConnectionManager.getInstance().finishPairing(bluetoothDevice)
-                    Log.d("STUDEBUG", "FINISH PAIRING")
-                }
-                BluetoothConnectionManager.getInstance().cancelPairing(bluetoothDevice)
-                Log.d("STUDEBUG", "CANCEL PAIRING")
-            }
-
-            override fun onPaired(bluetoothDevice: BluetoothDevice?) {
-            }
-        })
+        BluetoothConnectionManager.getInstance().registerPairingCallback(mahBTPairingCallback)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -88,12 +71,42 @@ class MainActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onDestroy() {
+
+        BluetoothConnectionManager.getInstance().unregisterPairingCallback(mahBTPairingCallback)
+
+        super.onDestroy()
+    }
+
+    //----- HELPERS BELOW THIS LINE -----
+
     private fun turnBTRadioON(){
         startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_TURN_BT_ON)
     }
 
     private fun startDiscoverability() {
         startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply { putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 60) }, REQUEST_MAKE_DISCOVERABLE)
+    }
+
+    inner class BTPairingCallback : BluetoothPairingCallback {
+        override fun onUnpaired(bluetoothDevice: BluetoothDevice?) {
+        }
+
+        override fun onPairingError(bluetoothDevice: BluetoothDevice?, error: BluetoothPairingCallback.PairingError?) {
+        }
+
+        override fun onPairingInitiated(bluetoothDevice: BluetoothDevice?, pairingParams: PairingParams?) {
+            val okToPair = bluetoothDevice?.name.equals("Essential Phone")
+            if (okToPair) {
+                BluetoothConnectionManager.getInstance().finishPairing(bluetoothDevice)
+                Log.d("STUDEBUG", "FINISH PAIRING")
+            }
+            BluetoothConnectionManager.getInstance().cancelPairing(bluetoothDevice)
+            Log.d("STUDEBUG", "CANCEL PAIRING")
+        }
+
+        override fun onPaired(bluetoothDevice: BluetoothDevice?) {
+        }
     }
 
     companion object {
