@@ -18,6 +18,9 @@
         android:fullBackupContent="@xml/backup_rules"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <service android:name=".services.ConnectBTDeviceIntentService"
+            android:exported="false"/>
+
         <activity
             android:label="@string/app_name"
             android:name=".ui.welcome.WelcomeActivity"

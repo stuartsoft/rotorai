@@ -1,10 +1,13 @@
 package ai.rotor.commonstuff
 
 import android.bluetooth.BluetoothDevice
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 //basically another wrapper because mocking bluetooth stuff in Android sux
-data class GenericBTDevice(val name: String, val address: String, val uuid: UUID?) {
+@Parcelize
+data class GenericBTDevice(val name: String, val address: String, val uuid: UUID?) : Parcelable {
     constructor(device: BluetoothDevice) : this(
             device.name ?: "",
             device.address ?: "",

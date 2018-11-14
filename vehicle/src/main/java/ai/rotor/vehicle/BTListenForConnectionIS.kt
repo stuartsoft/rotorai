@@ -1,10 +1,10 @@
 package ai.rotor.vehicle
 
+import ai.rotor.commonstuff.RotorUtils
 import android.app.IntentService
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import java.util.*
 
 class BTListenForConnectionIS: IntentService("BTListenForConnectionIS"){
 
@@ -12,7 +12,7 @@ class BTListenForConnectionIS: IntentService("BTListenForConnectionIS"){
 
         //Make device discoverable
 
-        val socket = BluetoothAdapter.getDefaultAdapter().listenUsingRfcommWithServiceRecord("rotor.ai", UUID.fromString("4204ff84-190d-4cce-9e98-526915402758"))
+        val socket = BluetoothAdapter.getDefaultAdapter().listenUsingRfcommWithServiceRecord("rotor.ai", RotorUtils.ROTORAI_UUID)
         val result = socket.accept()
 
         socket.close()
@@ -22,7 +22,7 @@ class BTListenForConnectionIS: IntentService("BTListenForConnectionIS"){
     companion object {
         fun makeIntent(c: Context) = Intent(c, BTListenForConnectionIS::class.java)
 
-        val VEHICLE_NAME = "Stus Car"
+        val VEHICLE_NAME = "Stus Car (RTR001)"
     }
 
 }

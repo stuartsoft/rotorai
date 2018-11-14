@@ -1,8 +1,8 @@
 package ai.rotor.mobile.ui.welcome
 
 import ai.rotor.mobile.R
+import ai.rotor.mobile.services.ConnectBTDeviceIntentService
 import ai.rotor.mobile.ui.BaseActivity
-import ai.rotor.mobile.ui.remotecontrol.RemoteControlActivity
 import ai.rotor.mobile.ui.welcome.WelcomeFragment.WelcomeFragmentHost
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_ENABLE_LOCATION_PERMISSION
 import ai.rotor.mobile.ui.welcome.WelcomeViewModel.Companion.REQUEST_TURN_BT_ON
@@ -58,8 +58,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         })
 
         viewModel.readyToStartRemoteControl.observe(this, Observer {
-            startActivity(RemoteControlActivity.buildIntent(this))
-            finish()
+            startService(ConnectBTDeviceIntentService.makeIntent(this, it))
         })
     }
 

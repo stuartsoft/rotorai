@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -24,6 +25,15 @@ android {
     }
 
 }
+
+androidExtensions {
+    // Needed for Kotlin Parcelable support
+    experimental = true
+
+    // Prevents a bunch of other stuff from being generated
+    defaultCacheImplementation = "none"
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

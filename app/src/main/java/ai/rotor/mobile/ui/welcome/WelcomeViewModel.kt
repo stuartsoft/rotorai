@@ -22,7 +22,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.databinding.Bindable
 import kotlinx.android.parcel.Parcelize
-import timber.log.Timber
 import javax.inject.Inject
 
 open class WelcomeViewModel @Inject constructor(
@@ -36,7 +35,7 @@ open class WelcomeViewModel @Inject constructor(
 
     var shouldShowBTDialog = SingleLiveEvent<Boolean>()
     var shouldAskForLocationDialog = SingleLiveEvent<Boolean>()
-    var readyToStartRemoteControl = SingleLiveEvent<Boolean>()
+    var readyToStartRemoteControl = SingleLiveEvent<GenericBTDevice>()
 
     private var btDiscoveredDevices: MutableList<GenericBTDevice> = initialListOfItems
 
@@ -125,8 +124,10 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     fun btDeviceClicked(item: GenericBTDevice) {
-        Timber.d("STUDEBUG - BT Device clicked " + item.name)
-        btvc.isValidBTDeviceToConnectTo(item)
+        val okToConnect = btvc.isValidBTDeviceToConnectTo(item)
+        if (okToConnect) {
+            readyToStartRemoteControl.value = item
+        }
     }
 
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -141,13 +142,6 @@ open class WelcomeViewModel @Inject constructor(
     }
 
     //----- HELPERS BELOW THIS LINE -----
-
-    private fun connectionCalback(successful: Boolean) {
-        if (successful) {
-            //Open the controller activity
-            readyToStartRemoteControl.value = true
-        }
-    }
 
     @VisibleForTesting
     fun beginSearchingForDevices() {
