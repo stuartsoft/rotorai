@@ -78,10 +78,9 @@ class BTVehicleConnectorTest {
         connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
 
         val genericBTDevice = GenericBTDevice("Some random vehicle (RTR001)", "0000", UUID.randomUUID())
-        val mockCallback = spyk<(Boolean) -> Unit>()
-        connector.connectTo(genericBTDevice, mockCallback)
+        val result = connector.isValidBTDeviceToConnectTo(genericBTDevice)
 
-        verify { mockCallback.invoke(true) }
+        assertTrue(result)
     }
 
     @Test
@@ -91,10 +90,9 @@ class BTVehicleConnectorTest {
         connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
 
         val genericBTDevice = GenericBTDevice("MahHeadphones", "0000", UUID.randomUUID())
-        val mockCallback = spyk<(Boolean) -> Unit>()
-        connector.connectTo(genericBTDevice, mockCallback)
+        val result = connector.isValidBTDeviceToConnectTo(genericBTDevice)
 
-        verify { mockCallback.invoke(false) }
+        assertFalse(result)
     }
 
     @Test
@@ -103,10 +101,9 @@ class BTVehicleConnectorTest {
         connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
 
         val genericBTDevice = GenericBTDevice("simulator", "0000", UUID.randomUUID())
-        val mockCallback = spyk<(Boolean) -> Unit>()
-        connector.connectTo(genericBTDevice, mockCallback)
+        val result = connector.isValidBTDeviceToConnectTo(genericBTDevice)
 
-        verify { mockCallback.invoke(false) }
+        assertFalse(result)
     }
 
     @Test
@@ -116,10 +113,9 @@ class BTVehicleConnectorTest {
         connector = spyk(BTVehicleConnector(mockRotorBTAdapterWrapper))
 
         val genericBTDevice = WelcomeViewModel.simulatorDevice
-        val mockCallback = spyk<(Boolean) -> Unit>()
-        connector.connectTo(genericBTDevice, mockCallback)
+        val result = connector.isValidBTDeviceToConnectTo(genericBTDevice)
 
-        verify { mockCallback.invoke(true) }
+        assertTrue(result)
     }
 
     @Test

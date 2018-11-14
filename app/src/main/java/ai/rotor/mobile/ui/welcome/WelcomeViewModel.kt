@@ -126,7 +126,7 @@ open class WelcomeViewModel @Inject constructor(
 
     fun btDeviceClicked(item: GenericBTDevice) {
         Timber.d("STUDEBUG - BT Device clicked " + item.name)
-        btvc.connectTo(item) { this.connectionCalback(it) }
+        btvc.isValidBTDeviceToConnectTo(item)
     }
 
     fun isLocationPermissionEnabled() = ContextCompat.checkSelfPermission(app.applicationContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
