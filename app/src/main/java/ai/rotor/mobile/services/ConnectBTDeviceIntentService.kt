@@ -6,7 +6,6 @@ import android.app.IntentService
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 
 class ConnectBTDeviceIntentService: IntentService("ConnectBTDeviceIntentService"){
 
@@ -19,8 +18,9 @@ class ConnectBTDeviceIntentService: IntentService("ConnectBTDeviceIntentService"
 
         socket.connect()
 
-        Log.d("STUDEBUG ", "FINISHED connecting")
     }
+
+
 
     companion object {
         fun makeIntent(c: Context, genericBTDevice: GenericBTDevice) = Intent(c, ConnectBTDeviceIntentService::class.java).also { it.putExtra("DEVICE_TO_CONNECT_TO", genericBTDevice) }
