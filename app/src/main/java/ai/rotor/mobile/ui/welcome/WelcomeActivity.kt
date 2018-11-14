@@ -60,6 +60,7 @@ class WelcomeActivity : BaseActivity(), WelcomeFragmentHost {
         viewModel.readyToStartRemoteControl.observe(this, Observer {
             startService(ConnectBTDeviceIntentService.makeIntent(this, it))
         })
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
