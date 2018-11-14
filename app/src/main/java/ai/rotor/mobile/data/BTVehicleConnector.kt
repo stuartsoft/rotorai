@@ -41,14 +41,10 @@ class BTVehicleConnector @Inject constructor(private val rotorBTAdapterWrapper: 
     }
 
     fun connectTo(genericBTDevice: GenericBTDevice, callback: (didSucceed: Boolean)-> Unit) {
-        if(genericBTDevice.name.contains(Regex("(RTR.\\d)"))) {
-            callback(true)
-        }
-        else if (simulatorDevice == genericBTDevice){
-            callback(true)
-        }
-        else {
-            callback(false)
+        when {
+            genericBTDevice.name.contains(Regex("(RTR.\\d)")) -> callback(true)
+            simulatorDevice == genericBTDevice -> callback(true)
+            else -> callback(false)
         }
     }
 

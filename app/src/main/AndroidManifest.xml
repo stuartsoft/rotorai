@@ -29,7 +29,9 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.remotecontrol.RemoteControlActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.remotecontrol.RemoteControlActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="userLandscape"/>
         <!-- GENERATOR - MORE ACTIVITIES -->
 
         <activity-alias

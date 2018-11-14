@@ -1,14 +1,12 @@
 package ai.rotor.mobile.ui.remotecontrol
 
-import android.content.Context
-import android.content.Intent
-import androidx.databinding.DataBindingUtil
-import android.os.Bundle
-
 import ai.rotor.mobile.R
 import ai.rotor.mobile.ui.BaseActivity
 import ai.rotor.mobile.ui.remotecontrol.RemoteControlFragment.RemoteControlFragmentHost
-
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import javax.inject.Inject
 
 class RemoteControlActivity : BaseActivity(), RemoteControlFragmentHost {
@@ -26,8 +24,6 @@ class RemoteControlActivity : BaseActivity(), RemoteControlFragmentHost {
         binding.vm = viewModel
         binding.executePendingBindings()
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar!!.title = "RemoteControl"
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
